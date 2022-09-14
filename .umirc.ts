@@ -10,7 +10,16 @@ export default defineConfig({
     type: 'none',
   },
   routes: [
-    { path: '/', component: '@/pages/index' },
+    {
+      path: '/',
+      component: '@/layouts/index',
+      routes: [
+        { path: '/', redirect: '/home' },
+        { path: '/home', component: '@/pages/home', title: 'ad3' },
+        { path: '/adventure3', component: '@/pages/adventure3', title: 'ad3' },
+        { path: '/native', component: '@/pages/native', title: 'ad3' },
+      ],
+    },
   ],
   fastRefresh: {},
 });
