@@ -3,8 +3,7 @@ import { useState } from 'react';
 import styles from './index.less';
 
 export default () => {
-  const [sortVisible, setSortVisible] = useState(false);
-  const [listVisible, setListVisible] = useState(true);
+  const [listVisible, setListVisible] = useState(false);
 
   return (
     <div className={styles.module}>
@@ -14,10 +13,13 @@ export default () => {
           className={styles.searchInput}
           onChange={(e) => console.info(e.target.value)}
         />
-        <div className={styles.searchBtn}>Search</div>
+        <div
+          className={styles.searchBtn}
+          onClick={() => setListVisible(true)}
+        >Search</div>
       </div>
       {/* 任务合集 */}
-      {sortVisible ? (
+      {!listVisible ? (
         <div
           style={{
             display: 'flex',
@@ -43,7 +45,10 @@ export default () => {
                 arr: [1, 1, 1, 1],
               },
             ].map((item, index) => (
-              <div className={styles[`card${index + 1}`]}>
+              <div
+                className={styles[`card${index + 1}`]}
+                onClick={() => setListVisible(true)}
+              >
                 <h2 className={styles.cardTitle}>{item.title}</h2>
                 <p className={styles.cardContent}>{item.desc}</p>
                 <div className={styles.cardSort}>
