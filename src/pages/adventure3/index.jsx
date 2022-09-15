@@ -9,7 +9,7 @@ export default () => {
   const [list, setList] = useState([]);
   const [listLoading, setListLoading] = useState(false);
   const [listVisible, setListVisible] = useState(false);
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(0);
 
   const searchInputRef = useRef(null);
@@ -56,8 +56,8 @@ export default () => {
       if (result && result.dataList && result.dataList.length) {
         setList(result.dataList);
         setListVisible(true);
-        setCurrent(pageNum);
-        setTotal(result.total);
+        setCurrent(result.pageNum);
+        setTotal(result.totalCount);
       }
     } catch (error) {
       console.warn(error);
@@ -224,7 +224,7 @@ export default () => {
                 key={`card-${index}`}
                 className={styles[`card${index + 1}`]}
                 onClick={() =>
-                  fetchList({ taskDifficulty: item.arr.length, pageNum: 0 })
+                  fetchList({ taskDifficulty: item.arr.length, pageNum: 1 })
                 }
               >
                 <h2 className={styles.cardTitle}>{item.title}</h2>
@@ -286,7 +286,7 @@ export default () => {
             searchInputVal = e.target.value;
           }}
         />
-        <div className={styles.searchBtn} onClick={() => fetchList({ taskName: searchInputVal, pageNum: 0 })}>
+        <div className={styles.searchBtn} onClick={() => fetchList({ taskName: searchInputVal, pageNum: 1 })}>
           Search
         </div>
       </div>

@@ -9,6 +9,9 @@ export default defineConfig({
   nodeModulesTransform: {
     type: 'none',
   },
+  theme: {
+    "primary-color": "#49ecbd",
+  },
   routes: [
     {
       path: '/',
