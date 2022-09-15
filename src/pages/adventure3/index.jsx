@@ -10,6 +10,7 @@ export default () => {
   const [listLoading, setListLoading] = useState(false);
   const [listVisible, setListVisible] = useState(false);
   const [current, setCurrent] = useState(0);
+  const [total, setTotal] = useState(0);
 
   const searchInputRef = useRef(null);
 
@@ -44,23 +45,22 @@ export default () => {
           method: 'POST',
           mode: 'cors',
           cache: 'no-cache',
-          credentials: 'include',
+          credentials: 'same-origin',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(params),
         },
       );
-      const result = response.json();
-      console.info(result);
-
-      setListVisible(true);
-      setCurrent(pageNum);
+      const result = await response.json();
+      if (result && result.dataList && result.dataList.length) {
+        setList(result.dataList);
+        setListVisible(true);
+        setCurrent(pageNum);
+        setTotal(result.total);
+      }
     } catch (error) {
-
       console.warn(error);
-      setListVisible(true);
-      setCurrent(pageNum);
     }
 
     lock = false;
@@ -68,6 +68,41 @@ export default () => {
       setListLoading(false);
     }, 500);
   };
+
+  // 输出卡片难度数组
+  const createIconArr = (amount = 0) => {
+    const result = [];
+    for (let i = 0; i < amount; i += 1) {
+      result.push(1);
+    }
+    return result;
+  };
+
+  // 输出不同难度的卡片 ICON
+  const renderTaskDifficultyIcon = (amount = 0) => {
+    if (amount <= 1) {
+      return (
+        <img
+          className={styles.listItemIcon}
+          src={require('@/static/card-icon1.png')}
+        />
+      );
+    } else if (amount > 1 && amount <=4) {
+      return (
+        <img
+          className={styles.listItemIcon}
+          src={require('@/static/card-icon2.png')}
+        />
+      );
+    } else {
+      return (
+        <img
+          className={styles.listItemIcon}
+          src={require('@/static/card-icon3.png')}
+        />
+      );
+    }
+  }
 
   // 输出主体内容
   const renderContent = () => {
@@ -82,6 +117,7 @@ export default () => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            width: '100%',
           }}
         >
           <p className={styles.listTip}>
@@ -122,23 +158,20 @@ export default () => {
               xl: 3,
               xxl: 4,
             }}
-            dataSource={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
+            dataSource={list}
             renderItem={(item) => (
-              <a className={styles.listItemWrapper}>
+              <a className={styles.listItemWrapper} target="_blank" href={item.taskJumpUrl}>
                 <div className={styles.listItem}>
                   <div className={styles.listItemHeader}>
-                    <img
-                      className={styles.listItemIcon}
-                      src={require('@/static/card-icon1.png')}
-                    />
+                    {renderTaskDifficultyIcon(+item.taskDifficulty)}
                     <h3 className={styles.listItemTitle}>
-                      [💰200 USDT] Newcomer Bonus Event ④🚀
+                      {item.taskName.length >= 30 ? `${item.taskName.slice(0, 30)}...` : item.taskName}
                     </h3>
                   </div>
                   <div className={styles.listItemBottom}>
-                    <div className={styles.listItemTag}>Product experience</div>
+                    <div className={styles.listItemTag}>{item.taskType.length >= 20 ? `${item.taskType.slice(0, 20)}...` : item.taskType}</div>
                     <div className={styles.listItemRank}>
-                      {[1, 1, 1, 1].map((item, index) => (
+                      {createIconArr(+item.taskDifficulty).map((item, index) => (
                         <img
                           key={`rank-image-${index}`}
                           className={styles.listItemRankImage}
@@ -152,7 +185,8 @@ export default () => {
             )}
             pagination={{
               current,
-              total: 100,
+              pageSize,
+              total,
               onChange: v => fetchList({ taskName: searchInputVal, pageNum: v }),
             }}
           />
