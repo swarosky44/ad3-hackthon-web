@@ -10,7 +10,7 @@ export default () => {
     const account = await provider
       .send('eth_requestAccounts', [])
       .catch(() => console.log('user rejected request'));
-    
+
     setAccount(account);
     setSigner(provider.getSigner());
   }, []);

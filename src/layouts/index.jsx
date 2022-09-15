@@ -4,17 +4,13 @@ import styles from './index.less';
 import 'antd/dist/antd.css';
 
 export default (props) => {
-  useEffect(() => {
-
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div className={styles.page}>
       <Header />
       <div className={styles.container}>
-        <div className={styles.content}>
-          {props.children}
-        </div>
+        <div className={styles.content}>{props.children}</div>
       </div>
       <div className={styles.footer}>
         <div className={styles.concat}>
@@ -26,14 +22,11 @@ export default (props) => {
             'concat-icon5.png',
           ].map((url, index) => (
             <a key={`footer-icon-${index}`} className={styles.iconWrapper}>
-              <img
-                className={styles.icon}
-                src={require(`@/static/${url}`)}
-              />
+              <img className={styles.icon} src={require(`@/static/${url}`)} />
             </a>
           ))}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

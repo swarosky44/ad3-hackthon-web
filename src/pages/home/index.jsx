@@ -6,7 +6,9 @@ export default () => {
     <div className={styles.module}>
       <h1 className={styles.title}>Take Adventure in Web3</h1>
       <h1 className={styles.title}>All in One Easy to use Use to earn</h1>
-      <Link className={styles.launchBtn} to="/adventure3">Launch APP</Link>
+      <Link className={styles.launchBtn} to="/adventure3">
+        Launch APP
+      </Link>
       <h1 className={styles.title}>Web3 users have to find tasks</h1>
       <h1 className={styles.title}>on different platforms</h1>
       <p className={styles.content}>
@@ -42,22 +44,10 @@ export default () => {
       <p className={styles.content} style={{ marginBottom: '445px' }}>
         The best time to start building your on-chain resume is today in AD3！
       </p>
-      <img
-        className={styles.banner1}
-        src={require("@/static/banner1.png")}
-      />
-      <img
-        className={styles.banner2}
-        src={require("@/static/banner2.png")}
-      />
-      <img
-        className={styles.banner3}
-        src={require("@/static/banner3.png")}
-      />
-      <img
-        className={styles.banner4}
-        src={require("@/static/banner4.png")}
-      />
+      <img className={styles.banner1} src={require('@/static/banner1.png')} />
+      <img className={styles.banner2} src={require('@/static/banner2.png')} />
+      <img className={styles.banner3} src={require('@/static/banner3.png')} />
+      <img className={styles.banner4} src={require('@/static/banner4.png')} />
     </div>
   );
 };

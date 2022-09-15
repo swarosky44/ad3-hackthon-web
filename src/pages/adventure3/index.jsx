@@ -10,7 +10,12 @@ export default () => {
   const [listVisible, setListVisible] = useState(false);
   const [current, setCurrent] = useState(0);
 
-  const fetchList = async ({ taskName = "", taskDifficulty = 0, taskType = "", pageNum = 0 }) => {
+  const fetchList = async ({
+    taskName = '',
+    taskDifficulty = 0,
+    taskType = '',
+    pageNum = 0,
+  }) => {
     if (lock) return;
     lock = true;
     setListLoading(true);
@@ -30,23 +35,25 @@ export default () => {
     }
 
     try {
-      const response = await window.fetch('http://52.73.108.81:8080/pageQueryTask', {
-        method: 'POST',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await window.fetch(
+        'http://52.73.108.81:8080/pageQueryTask',
+        {
+          method: 'POST',
+          mode: 'cors',
+          cache: 'no-cache',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(params),
         },
-        body: JSON.stringify(params),
-      });
+      );
       const result = response.json();
       console.info(result);
-      
+
       setListVisible(true);
       setListLoading(false);
       setCurrent(pageNum);
-
     } catch (error) {
       console.warn(error);
       setListLoading(false);
@@ -61,10 +68,9 @@ export default () => {
           className={styles.searchInput}
           onChange={(e) => console.info(e.target.value)}
         />
-        <div
-          className={styles.searchBtn}
-          onClick={() => setListVisible(true)}
-        >Search</div>
+        <div className={styles.searchBtn} onClick={() => setListVisible(true)}>
+          Search
+        </div>
       </div>
       {/* 任务合集 */}
       {!listVisible ? (
@@ -96,7 +102,9 @@ export default () => {
               <div
                 key={`card-${index}`}
                 className={styles[`card${index + 1}`]}
-                onClick={() => fetchList({ taskDifficulty: item.arr.length, pageNum: 0 })}
+                onClick={() =>
+                  fetchList({ taskDifficulty: item.arr.length, pageNum: 0 })
+                }
               >
                 <h2 className={styles.cardTitle}>{item.title}</h2>
                 <p className={styles.cardContent}>{item.desc}</p>
@@ -160,14 +168,17 @@ export default () => {
                   Difficulty
                   <img
                     className={styles.sortArrow}
-                    src={require("@/static/sortArrow.png")}
+                    src={require('@/static/sortArrow.png')}
                   />
                 </div>
-                <div className={styles.listSortFormItem} style={{marginLeft: '24px' }}>
+                <div
+                  className={styles.listSortFormItem}
+                  style={{ marginLeft: '24px' }}
+                >
                   Type
                   <img
                     className={styles.sortArrow}
-                    src={require("@/static/sortArrow.png")}
+                    src={require('@/static/sortArrow.png')}
                   />
                 </div>
               </div>
@@ -186,17 +197,17 @@ export default () => {
               xxl: 4,
             }}
             dataSource={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
-            renderItem={item => (
-              <a
-                className={styles.listItemWrapper}
-              >
+            renderItem={(item) => (
+              <a className={styles.listItemWrapper}>
                 <div className={styles.listItem}>
                   <div className={styles.listItemHeader}>
                     <img
                       className={styles.listItemIcon}
-                      src={require("@/static/card-icon1.png")}
+                      src={require('@/static/card-icon1.png')}
                     />
-                    <h3 className={styles.listItemTitle}>[💰200 USDT] Newcomer Bonus Event ④🚀</h3>
+                    <h3 className={styles.listItemTitle}>
+                      [💰200 USDT] Newcomer Bonus Event ④🚀
+                    </h3>
                   </div>
                   <div className={styles.listItemBottom}>
                     <div className={styles.listItemTag}>Product experience</div>
@@ -205,7 +216,7 @@ export default () => {
                         <img
                           key={`rank-image-${index}`}
                           className={styles.listItemRankImage}
-                          src={require("@/static/icon1.png")}
+                          src={require('@/static/icon1.png')}
                         />
                       ))}
                     </div>
