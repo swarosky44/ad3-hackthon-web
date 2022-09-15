@@ -1,14 +1,17 @@
-import { List } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { List, Pagination, Skeleton } from 'antd';
 import styles from './index.less';
 
 let lock = false;
+let searchInputVal = "";
 const pageSize = 12;
 export default () => {
   const [list, setList] = useState([]);
   const [listLoading, setListLoading] = useState(false);
   const [listVisible, setListVisible] = useState(false);
   const [current, setCurrent] = useState(0);
+
+  const searchInputRef = useRef(null);
 
   const fetchList = async ({
     taskName = '',
@@ -52,28 +55,112 @@ export default () => {
       console.info(result);
 
       setListVisible(true);
-      setListLoading(false);
       setCurrent(pageNum);
     } catch (error) {
+
       console.warn(error);
-      setListLoading(false);
+      setListVisible(true);
+      setCurrent(pageNum);
     }
+
+    lock = false;
+    setTimeout(() => {
+      setListLoading(false);
+    }, 500);
   };
 
-  return (
-    <div className={styles.module}>
-      <h1 className={styles.title}>Start your adventure in Web3</h1>
-      <div className={styles.searchBar}>
-        <input
-          className={styles.searchInput}
-          onChange={(e) => console.info(e.target.value)}
-        />
-        <div className={styles.searchBtn} onClick={() => setListVisible(true)}>
-          Search
+  // 输出主体内容
+  const renderContent = () => {
+    if (listLoading) {
+      return <Skeleton active />;
+    }
+
+    if (listVisible) {
+      return (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <p className={styles.listTip}>
+            We have retrieved the following matching results for you
+            <div className={styles.listSort}>
+              Filter by
+              <div className={styles.listSortForm}>
+                <div className={styles.listSortFormItem}>
+                  Difficulty
+                  <img
+                    className={styles.sortArrow}
+                    src={require('@/static/sortArrow.png')}
+                  />
+                </div>
+                <div
+                  className={styles.listSortFormItem}
+                  style={{ marginLeft: '24px' }}
+                >
+                  Type
+                  <img
+                    className={styles.sortArrow}
+                    src={require('@/static/sortArrow.png')}
+                  />
+                </div>
+              </div>
+            </div>
+          </p>
+          <List
+            size="large"
+            style={{ width: '100%', marginTop: '58px' }}
+            loading={listLoading}
+            grid={{
+              gutter: 16,
+              xs: 1,
+              sm: 2,
+              md: 2,
+              lg: 3,
+              xl: 3,
+              xxl: 4,
+            }}
+            dataSource={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
+            renderItem={(item) => (
+              <a className={styles.listItemWrapper}>
+                <div className={styles.listItem}>
+                  <div className={styles.listItemHeader}>
+                    <img
+                      className={styles.listItemIcon}
+                      src={require('@/static/card-icon1.png')}
+                    />
+                    <h3 className={styles.listItemTitle}>
+                      [💰200 USDT] Newcomer Bonus Event ④🚀
+                    </h3>
+                  </div>
+                  <div className={styles.listItemBottom}>
+                    <div className={styles.listItemTag}>Product experience</div>
+                    <div className={styles.listItemRank}>
+                      {[1, 1, 1, 1].map((item, index) => (
+                        <img
+                          key={`rank-image-${index}`}
+                          className={styles.listItemRankImage}
+                          src={require('@/static/icon1.png')}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </a>
+            )}
+            pagination={{
+              current,
+              total: 100,
+              onChange: v => fetchList({ taskName: searchInputVal, pageNum: v }),
+            }}
+          />
         </div>
-      </div>
-      {/* 任务合集 */}
-      {!listVisible ? (
+      );
+    } else {
+      return (
+
         <div
           style={{
             display: 'flex',
@@ -150,83 +237,26 @@ export default () => {
             />
           </div>
         </div>
-      ) : null}
-      {listVisible ? (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+      );
+    }
+  }
+
+  return (
+    <div className={styles.module}>
+      <h1 className={styles.title}>Start your adventure in Web3</h1>
+      <div className={styles.searchBar}>
+        <input
+          ref={searchInputRef}
+          className={styles.searchInput}
+          onChange={(e) => {
+            searchInputVal = e.target.value;
           }}
-        >
-          <p className={styles.listTip}>
-            We have retrieved the following matching results for you
-            <div className={styles.listSort}>
-              Filter by
-              <div className={styles.listSortForm}>
-                <div className={styles.listSortFormItem}>
-                  Difficulty
-                  <img
-                    className={styles.sortArrow}
-                    src={require('@/static/sortArrow.png')}
-                  />
-                </div>
-                <div
-                  className={styles.listSortFormItem}
-                  style={{ marginLeft: '24px' }}
-                >
-                  Type
-                  <img
-                    className={styles.sortArrow}
-                    src={require('@/static/sortArrow.png')}
-                  />
-                </div>
-              </div>
-            </div>
-          </p>
-          <List
-            size="large"
-            style={{ width: '100%', marginTop: '58px' }}
-            grid={{
-              gutter: 16,
-              xs: 1,
-              sm: 2,
-              md: 2,
-              lg: 3,
-              xl: 3,
-              xxl: 4,
-            }}
-            dataSource={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
-            renderItem={(item) => (
-              <a className={styles.listItemWrapper}>
-                <div className={styles.listItem}>
-                  <div className={styles.listItemHeader}>
-                    <img
-                      className={styles.listItemIcon}
-                      src={require('@/static/card-icon1.png')}
-                    />
-                    <h3 className={styles.listItemTitle}>
-                      [💰200 USDT] Newcomer Bonus Event ④🚀
-                    </h3>
-                  </div>
-                  <div className={styles.listItemBottom}>
-                    <div className={styles.listItemTag}>Product experience</div>
-                    <div className={styles.listItemRank}>
-                      {[1, 1, 1, 1].map((item, index) => (
-                        <img
-                          key={`rank-image-${index}`}
-                          className={styles.listItemRankImage}
-                          src={require('@/static/icon1.png')}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </a>
-            )}
-          />
+        />
+        <div className={styles.searchBtn} onClick={() => fetchList({ taskName: searchInputVal, pageNum: 0 })}>
+          Search
         </div>
-      ) : null}
+      </div>
+      {renderContent()}
     </div>
   );
 };
