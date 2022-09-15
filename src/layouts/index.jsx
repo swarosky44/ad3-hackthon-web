@@ -24,8 +24,8 @@ export default (props) => {
             'concat-icon3.png',
             'concat-icon4.png',
             'concat-icon5.png',
-          ].map(url => (
-            <a className={styles.iconWrapper}>
+          ].map((url, index) => (
+            <a key={`footer-icon-${index}`} className={styles.iconWrapper}>
               <img
                 className={styles.icon}
                 src={require(`@/static/${url}`)}

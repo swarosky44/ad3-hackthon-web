@@ -1,9 +1,57 @@
 import { List } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './index.less';
 
+let lock = false;
+const pageSize = 12;
 export default () => {
+  const [list, setList] = useState([]);
+  const [listLoading, setListLoading] = useState(false);
   const [listVisible, setListVisible] = useState(false);
+  const [current, setCurrent] = useState(0);
+
+  const fetchList = async ({ taskName = "", taskDifficulty = 0, taskType = "", pageNum = 0 }) => {
+    if (lock) return;
+    lock = true;
+    setListLoading(true);
+
+    const params = { pageNum, pageSize };
+
+    if (taskName) {
+      params.taskName = taskName;
+    }
+
+    if (taskDifficulty > 0) {
+      params.taskDifficulty = taskDifficulty;
+    }
+
+    if (taskType) {
+      params.taskType = taskType;
+    }
+
+    try {
+      const response = await window.fetch('http://52.73.108.81:8080/pageQueryTask', {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+      });
+      const result = response.json();
+      console.info(result);
+      
+      setListVisible(true);
+      setListLoading(false);
+      setCurrent(pageNum);
+
+    } catch (error) {
+      console.warn(error);
+      setListLoading(false);
+    }
+  };
 
   return (
     <div className={styles.module}>
@@ -46,16 +94,18 @@ export default () => {
               },
             ].map((item, index) => (
               <div
+                key={`card-${index}`}
                 className={styles[`card${index + 1}`]}
-                onClick={() => setListVisible(true)}
+                onClick={() => fetchList({ taskDifficulty: item.arr.length, pageNum: 0 })}
               >
                 <h2 className={styles.cardTitle}>{item.title}</h2>
                 <p className={styles.cardContent}>{item.desc}</p>
                 <div className={styles.cardSort}>
                   <div className={styles.cardSortLine}>
                     <span className={styles.cardSortText}>Difficulty</span>
-                    {item.arr.map(() => (
+                    {item.arr.map((item, index) => (
                       <img
+                        key={`sort-icon-${index}`}
                         className={styles.sortIcon}
                         src={require('@/static/icon1.png')}
                       />
@@ -63,8 +113,9 @@ export default () => {
                   </div>
                   <div className={styles.cardSortLine}>
                     <span className={styles.cardSortText}>Reward</span>
-                    {item.arr.map(() => (
+                    {item.arr.map((item, index) => (
                       <img
+                        key={`sort-icon-${index}`}
                         className={styles.sortIcon}
                         src={require('@/static/icon2.png')}
                       />
@@ -150,8 +201,9 @@ export default () => {
                   <div className={styles.listItemBottom}>
                     <div className={styles.listItemTag}>Product experience</div>
                     <div className={styles.listItemRank}>
-                      {[1, 1, 1, 1].map(() => (
+                      {[1, 1, 1, 1].map((item, index) => (
                         <img
+                          key={`rank-image-${index}`}
                           className={styles.listItemRankImage}
                           src={require("@/static/icon1.png")}
                         />

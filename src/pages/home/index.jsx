@@ -1,3 +1,4 @@
+import { Link } from 'umi';
 import styles from './index.less';
 
 export default () => {
@@ -5,7 +6,7 @@ export default () => {
     <div className={styles.module}>
       <h1 className={styles.title}>Take Adventure in Web3</h1>
       <h1 className={styles.title}>All in One Easy to use Use to earn</h1>
-      <div className={styles.launchBtn}>Launch APP</div>
+      <Link className={styles.launchBtn} to="/adventure3">Launch APP</Link>
       <h1 className={styles.title}>Web3 users have to find tasks</h1>
       <h1 className={styles.title}>on different platforms</h1>
       <p className={styles.content}>
