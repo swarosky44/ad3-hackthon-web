@@ -317,13 +317,19 @@
   right: 0;
   min-width: 300px;
   max-height: 400px;
-  border-bottom-left-radius: 24px;
-  border-bottom-right-radius: 24px;
+  border-radius: 24px;
+  border-radius: 24px;
   background-color: #087B56;
   transform: translate3d(0, 100%, 0);
   z-index: 88;
   overflow-x: hidden;
   overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.selectBox::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
 }
 
 .selectList {
@@ -334,8 +340,16 @@
 .selectItem {
   display: block;
   font-size: 16px;
-  padding: 6px 12px 10px 12px;
+  padding: 6px 12px 10px 16px;
   color: #fff;
+}
+
+
+.selectItem:first-child {
+  padding-top: 16px;
+}
+.selectItem:last-child {
+  padding-bottom: 12px;
 }
 
 .selectActiveItem {
