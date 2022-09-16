@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
-import { List, Pagination, Skeleton } from 'antd';
+import { List, Pagination, Select, Skeleton } from 'antd';
+import { TASK_DIFFICULTY, TASK_TYPE } from '@/utils/const';
 import styles from './index.less';
 
 let lock = false;
@@ -11,31 +12,28 @@ export default () => {
   const [listVisible, setListVisible] = useState(false);
   const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(0);
+  const [taskDifficultyVisible, setTaskDifficultyVisible] = useState(false);
+  const [taskTypeVisible, setTaskTypeVisible] = useState(false);
+  const [activeDifficulty, setActiveDifficulty] = useState(-1);
+  const [activeType, setActiveType] = useState("");
 
-  const searchInputRef = useRef(null);
-
-  const fetchList = async ({
-    taskName = '',
-    taskDifficulty = 0,
-    taskType = '',
-    pageNum = 0,
-  }) => {
+  const fetchList = async ({ pageNum = 0 }) => {
     if (lock) return;
     lock = true;
     setListLoading(true);
 
     const params = { pageNum, pageSize };
 
-    if (taskName) {
-      params.taskName = taskName;
+    if (searchInputVal) {
+      params.taskName = searchInputVal;
     }
 
-    if (taskDifficulty > 0) {
-      params.taskDifficulty = taskDifficulty;
+    if (activeDifficulty > 0) {
+      params.taskDifficulty = TASK_DIFFICULTY[activeDifficulty].value;
     }
 
-    if (taskType) {
-      params.taskType = taskType;
+    if (activeType > 0) {
+      params.taskType = TASK_TYPE[activeType].value;
     }
 
     try {
@@ -53,7 +51,7 @@ export default () => {
         },
       );
       const result = await response.json();
-      if (result && result.dataList && result.dataList.length) {
+      if (result && result.dataList) {
         setList(result.dataList);
         setListVisible(true);
         setCurrent(result.pageNum);
@@ -66,7 +64,7 @@ export default () => {
     lock = false;
     setTimeout(() => {
       setListLoading(false);
-    }, 500);
+    }, 200);
   };
 
   // 输出卡片难度数组
@@ -77,6 +75,26 @@ export default () => {
     }
     return result;
   };
+
+  // 选择难度
+  const onDifficultySelect = (e, index) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setActiveDifficulty(index);
+  }
+  
+  // 选择类型
+  const onTypeSelect = (e, index) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setActiveType(index);
+  }
+
+  useEffect(() => {
+    fetchList({ pageNum: 1 });
+    setTaskTypeVisible(false);
+    setTaskDifficultyVisible(false);
+  }, [activeDifficulty, activeType]);
 
   // 输出不同难度的卡片 ICON
   const renderTaskDifficultyIcon = (amount = 0) => {
@@ -119,28 +137,80 @@ export default () => {
             alignItems: 'center',
             width: '100%',
           }}
+          onClick={() => {
+            setTaskDifficultyVisible(false);
+            setTaskTypeVisible(false);
+          }}
         >
           <p className={styles.listTip}>
             We have retrieved the following matching results for you
             <div className={styles.listSort}>
               Filter by
               <div className={styles.listSortForm}>
-                <div className={styles.listSortFormItem}>
+                <div
+                  className={styles.listSortFormItem}
+                  onClick={e => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    setTaskDifficultyVisible(!taskDifficultyVisible);
+                    setTaskTypeVisible(false);
+                  }}
+                >
                   Difficulty
                   <img
                     className={styles.sortArrow}
                     src={require('@/static/sortArrow.png')}
                   />
+                  <div className={styles.selectBox} style={{ visibility: taskDifficultyVisible ? 'visible' : 'hidden' }}>
+                    <ul className={styles.selectList}>
+                      {TASK_DIFFICULTY.map((item, index) => (
+                        <li
+                          key={`difficulty-${index}`}
+                          className={activeDifficulty === index ? styles.selectActiveItem : styles.selectItem}
+                          onClick={e => onDifficultySelect(e, index)}
+                        >
+                          {item.value > 0 ? (
+                            createIconArr(item.value).map((jtem, jndex) => (
+                              <img
+                                key={`difficulty-image-${jndex}`}
+                                className={styles.listItemRankImage}
+                                src={require('@/static/icon1.png')}
+                              />
+                            ))
+                          ) : item.label}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
                 <div
                   className={styles.listSortFormItem}
                   style={{ marginLeft: '24px' }}
+                  onClick={e => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    setTaskDifficultyVisible(false);
+                    setTaskTypeVisible(!taskTypeVisible);
+                  }}
                 >
                   Type
                   <img
                     className={styles.sortArrow}
                     src={require('@/static/sortArrow.png')}
                   />
+                  <div className={styles.selectBox} style={{ visibility: taskTypeVisible ? 'visible' : 'hidden' }}>
+                    <ul className={styles.selectList}>
+                      {TASK_TYPE.map((item, index) => (
+                        <li
+                          key={`type-${index}`}
+                          className={activeType === index ? styles.selectActiveItem : styles.selectItem}
+                          onClick={e => onTypeSelect(e, index)}
+                        >
+                          {item.value ? item.value : item.label}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -158,6 +228,7 @@ export default () => {
               xl: 3,
               xxl: 4,
             }}
+            locale={{ emptyText: 'NO DATA' }}
             dataSource={list}
             renderItem={(item) => (
               <a className={styles.listItemWrapper} target="_blank" href={item.taskJumpUrl}>
@@ -187,7 +258,7 @@ export default () => {
               current,
               pageSize,
               total,
-              onChange: v => fetchList({ taskName: searchInputVal, pageNum: v }),
+              onChange: v => fetchList({ pageNum: v }),
             }}
           />
         </div>
@@ -280,13 +351,12 @@ export default () => {
       <h1 className={styles.title}>Start your adventure in Web3</h1>
       <div className={styles.searchBar}>
         <input
-          ref={searchInputRef}
           className={styles.searchInput}
           onChange={(e) => {
             searchInputVal = e.target.value;
           }}
         />
-        <div className={styles.searchBtn} onClick={() => fetchList({ taskName: searchInputVal, pageNum: 1 })}>
+        <div className={styles.searchBtn} onClick={() => fetchList({ pageNum: 1 })}>
           Search
         </div>
       </div>
