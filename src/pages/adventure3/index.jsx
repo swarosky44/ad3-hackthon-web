@@ -38,7 +38,7 @@ export default () => {
 
     try {
       const response = await window.fetch(
-        'http://52.73.108.81:8080/pageQueryTask',
+        'https://www.adventure3.tk/pageQueryTask',
         {
           method: 'POST',
           mode: 'cors',
