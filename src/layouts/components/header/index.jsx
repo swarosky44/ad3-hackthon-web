@@ -3,15 +3,14 @@ import { Tooltip } from 'antd';
 import styles from './index.less';
 
 export default () => {
-  const { connectWallet, signer, provider, account } = useModel(
-    'global',
-    (model) => ({
+  const { connectWallet, signer, provider, account, hadInstallMetaMask } =
+    useModel('global', (model) => ({
       provider: model.provider,
       signer: model.signer,
       account: model.account,
       connectWallet: model.connectWallet,
-    }),
-  );
+      hadInstallMetaMask: model.hadInstallMetaMask,
+    }));
 
   const formatAddress = (address) => {
     let result = '';
@@ -23,6 +22,7 @@ export default () => {
     return result;
   };
 
+  console.info(hadInstallMetaMask);
   return (
     <div className={styles.header}>
       <div className={styles.logo}>
@@ -39,13 +39,26 @@ export default () => {
             <span className={styles.menu}>{m.name}</span>
           </Link>
         ))}
-        {account && account[0] ? (
-          <Tooltip placement="bottom" title={account[0]}>
-            <span className={styles.account}>{formatAddress(account[0])}</span>
-          </Tooltip>
+        {hadInstallMetaMask ? (
+          account && account[0] ? (
+            <Tooltip placement="bottom" title={account[0]}>
+              <span className={styles.account}>
+                {formatAddress(account[0])}
+              </span>
+            </Tooltip>
+          ) : (
+            <div className={styles.wallet} onClick={connectWallet}>
+              connect
+            </div>
+          )
         ) : (
-          <div className={styles.wallet} onClick={connectWallet}>
-            connect
+          <div
+            className={styles.wallet}
+            onClick={() => {
+              window.open('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn', 'install metamsk');
+            }}
+          >
+            Install MetaMask
           </div>
         )}
       </div>
