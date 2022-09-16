@@ -55,7 +55,7 @@ export default () => {
           <div
             className={styles.wallet}
             onClick={() => {
-              window.open('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn', 'install metamsk');
+              window.open('https://metamask.io/', 'install metamsk');
             }}
           >
             Install MetaMask
