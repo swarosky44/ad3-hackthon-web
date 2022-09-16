@@ -91,9 +91,11 @@ export default () => {
   }
 
   useEffect(() => {
-    fetchList({ pageNum: 1 });
-    setTaskTypeVisible(false);
-    setTaskDifficultyVisible(false);
+    if (listVisible) {
+      fetchList({ pageNum: 1 });
+      setTaskTypeVisible(false);
+      setTaskDifficultyVisible(false);
+    }
   }, [activeDifficulty, activeType]);
 
   // 输出不同难度的卡片 ICON

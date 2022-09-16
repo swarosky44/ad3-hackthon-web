@@ -2,3 +2,34 @@
   font-size: 66px;
   color: #49ecbd;
 }
+
+.ant-pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.ant-pagination-item-link {
+  background-color: transparent !important;
+  border: none !important;
+  color: #49ecbd !important;
+  font-size: 18px !important;
+}
+
+.ant-pagination-item-active {
+  background-color: rgba(7, 213, 148, 0.4) !important;
+}
+
+.ant-pagination-item {
+  background-color: transparent;
+  border: none;
+}
+
+.ant-pagination-item a {
+  font-size: 18px !important;
+  color: #49ecbd;
+}
+
+.ant-pagination-options {
+  display: none;
+}

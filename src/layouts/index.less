@@ -21,17 +21,57 @@
 }
 
 .footer {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 220px;
+  padding-top: 20px;
+  background-color: rgba(7, 213, 148, 0.4);
+}
+
+.footerContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  padding-left: 48px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.footerLogo {
+  scale: 0.8;
+}
+
+.footerLogoWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 144px;
+  font-size: 36px;
+  color: #49ecbd;
+  letter-spacing: 1px;
+
+  p {
+    margin:  0;
+  }
+}
+
+.footerMenu {
+  display: flex;
+  flex-direction: column;
+  font-size: 24px;
 }
 
 .concat {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  width: 90%;
+  width: 95%;
 }
 
 .iconWrapper {
