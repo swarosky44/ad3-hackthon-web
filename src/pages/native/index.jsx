@@ -1,16 +1,22 @@
+import { useModel } from 'umi';
+import UnConnect from './components/unConnect';
+import Profile from './components/profile';
 import styles from './index.less';
 
 export default () => {
+  const { account } = useModel(
+    'global',
+    (model) => ({
+      account: model.account,
+    }),
+  );
   return (
     <div className={styles.module}>
-      <img
-        className={styles.comingSoon}
-        src={require('@/static/coming-soon.png')}
-      />
-      <h1 className={styles.title}>Coming Soon！</h1>
-      <h1 className={styles.title} style={{ marginBottom: '100px' }}>
-        The function is under development, please stay tuned
-      </h1>
+      {account && account[0] ? (
+        <Profile />
+      ) : (
+        <UnConnect />
+      )}
     </div>
   );
 };

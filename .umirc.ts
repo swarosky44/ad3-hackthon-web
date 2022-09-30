@@ -1,16 +1,32 @@
 import { defineConfig } from 'umi';
 
 export default defineConfig({
+  // 编译
   publicPath: './',
-  hash: true,
-  history: {
-    type: 'hash',
-  },
   nodeModulesTransform: {
     type: 'none',
   },
+  headScripts: [
+    {
+      src: 'https://www.googletagmanager.com/gtag/js?id=G-06VG3J3659',
+      async: true,
+    },
+    {
+      content: `window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-06VG3J3659');
+      `,
+      charset: 'utf-8',
+    },
+  ],
+  // UI
   theme: {
-    "primary-color": "#49ecbd",
+    'primary-color': '#49ecbd',
+  },
+  // 路由
+  history: {
+    type: 'hash',
   },
   routes: [
     {

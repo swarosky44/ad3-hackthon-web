@@ -33,3 +33,15 @@
 .ant-pagination-options {
   display: none;
 }
+
+.custom-notification {
+  top: 100px;
+  color: #49ecbd;
+  background-color: rgba(0, 241, 185, 0.3);
+}
+
+.custom-notification .ant-notification-notice-close {
+  top: 8px;
+  right: 8px;
+  color: #fff;
+}
