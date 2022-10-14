@@ -26,7 +26,7 @@ export default (props) => {
             {[
               { name: 'Home', path: '/home' },
               { name: 'Adventure3', path: '/adventure3' },
-              // { name: 'Native Score', path: '/native' },
+              { name: 'Native Score', path: '/native' },
             ].map((m, i) => (
               <Link to={m.path} key={i} key={`footer-menu-${i}`} style={{ marginTop: i === 0 ? 0 : '12px', color: '#000' }}>
                 <span className={styles.menu}>{m.name}</span>

@@ -16,3 +16,5 @@ export const TASK_TYPE = [
   { value: 'HACKATHON', label: '黑客松' },
   { value: 'PRODUCT_TASK', label: '产品任务' },
 ];
+
+export const WEB3_AUTH_CLIENT_ID = "BHX7lStczgqkZhVfnEskrWF1ffJlxr9uX3uXwxtoXEgs61kk__luNQgx_q0HMuogmDEA85B1mYuUQZecth606ow";

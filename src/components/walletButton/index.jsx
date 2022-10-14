@@ -1,6 +1,7 @@
 import { useModel } from 'umi';
 import { Tooltip } from 'antd';
 import styles from './index.less';
+import { useMemo } from 'react';
 
 const STYLE_OPTIONS = {
   middle: {
@@ -18,14 +19,15 @@ const STYLE_OPTIONS = {
     fontSize: '32px',
   },
 };
+
 export default ({ size = 'middle' }) => {
   const styleOption = STYLE_OPTIONS[size];
-  const { connectWallet, account, hadInstallMetaMask } = useModel(
+
+  const { userInfo, login } = useModel(
     'global',
     (model) => ({
-      account: model.account,
-      connectWallet: model.connectWallet,
-      hadInstallMetaMask: model.hadInstallMetaMask,
+      userInfo: model.userInfo,
+      login: model.login,
     }),
   );
 
@@ -39,29 +41,18 @@ export default ({ size = 'middle' }) => {
     return result;
   };
 
-  return hadInstallMetaMask ? (
-    account && account[0] ? (
-      <Tooltip placement="bottom" title={account[0]}>
-        <span className={styles.account}>{formatAddress(account[0])}</span>
-      </Tooltip>
-    ) : (
-      <div
-        className={styles.wallet}
-        style={styleOption}
-        onClick={connectWallet}
-      >
-        connect
-      </div>
-    )
+  console.info("userInfo", userInfo);
+  return userInfo ? (
+    <Tooltip placement="bottom" title={userInfo.address ? userInfo.address : userInfo.email}>
+      <span className={styles.account}>{userInfo.address ? formatAddress(userInfo.address) : userInfo.email}</span>
+    </Tooltip>
   ) : (
     <div
       className={styles.wallet}
       style={styleOption}
-      onClick={() => {
-        window.open('https://metamask.io/', 'install metamsk');
-      }}
+      onClick={login}
     >
-      Install MetaMask
+      connect
     </div>
   );
 };

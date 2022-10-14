@@ -45,3 +45,7 @@
   right: 8px;
   color: #fff;
 }
+
+.w3a-modal {
+  z-index: 999;
+}

@@ -37,6 +37,7 @@ export default defineConfig({
         { path: '/home', component: '@/pages/home', title: 'ad3' },
         { path: '/adventure3', component: '@/pages/adventure3', title: 'ad3' },
         { path: '/native', component: '@/pages/native', title: 'ad3' },
+        { path: '/test', component: '@/pages/test', title: 'ad3' },
       ],
     },
   ],
