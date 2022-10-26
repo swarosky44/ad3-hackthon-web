@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import styles from './index.less';
 
+const maxScore = 100;
 export default (props) => {
-  const { angleEnd = 2.9 } = props;
+  const { score } = props;
 
   // 初始化画布 & 参数
   const init = () => {
@@ -28,6 +29,7 @@ export default (props) => {
     // 外环旋转角度
     let process = 0;
     const angleStart = 1.5;
+    const angleEnd = angleStart + (score / maxScore);
 
     // 动画对象
     let ticker = null;

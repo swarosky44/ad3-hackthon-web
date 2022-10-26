@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { List, Pagination, Select, Skeleton } from 'antd';
 import { TASK_DIFFICULTY, TASK_TYPE } from '@/utils/const';
 import styles from './index.less';
+import { request } from '../../utils/request';
 
 let lock = false;
 let searchInputVal = "";
@@ -37,20 +38,12 @@ export default () => {
     }
 
     try {
-      const response = await window.fetch(
-        'https://www.adventure3.tk/pageQueryTask',
-        {
-          method: 'POST',
-          mode: 'cors',
-          cache: 'no-cache',
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(params),
-        },
-      );
-      const result = await response.json();
+      const result = await request({
+        method: 'POST',
+        api: 'api/task/pageQueryTask',
+        params,
+      });
+      console.info(result);
       if (result && result.dataList) {
         setList(result.dataList);
         setListVisible(true);
@@ -144,7 +137,7 @@ export default () => {
             setTaskTypeVisible(false);
           }}
         >
-          <p className={styles.listTip}>
+          <div className={styles.listTip}>
             We have retrieved the following matching results for you
             <div className={styles.listSort}>
               Filter by
@@ -216,7 +209,7 @@ export default () => {
                 </div>
               </div>
             </div>
-          </p>
+          </div>
           <List
             size="large"
             style={{ width: '100%', marginTop: '58px' }}
