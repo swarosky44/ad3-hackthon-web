@@ -1,0 +1,157 @@
+.module {
+  width: 100vw;
+}
+
+.header {
+  position: relative;
+}
+
+.bgImage {
+  width: 100vw;
+}
+
+.headerContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 300px;
+  z-index: 2;
+}
+
+.title {
+  font-size: 80px;
+  font-family: "Bungee-Regular";
+  margin: 0;
+}
+
+.reward {
+  font-size: 80px;
+  font-family: "Bungee-Regular";
+  margin: 0;
+}
+
+.timeline {
+  margin-top: 52px;
+  font-size: 24px;
+}
+
+.banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 214px;
+  background-color: #BEE7B3;
+}
+
+.contentWrap {
+  position: relative;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 1020px;
+  height: 108px;
+  border-radius: 12px;
+  border: 3px solid #000;
+  background-color: #EFFEEB;
+
+  .avatarList {
+    position: relative;
+    width: 177px;
+    height: 68px;
+    .avatar {
+      position: absolute;
+      top: 50%;
+      width: 68px;
+      height: 68px;
+      border: 2px solid #000;
+      border-radius: 50%;
+      background-color: #F1CE74;
+      transform: translate3d(0, -50%, 0);
+    }
+  }
+  .tip {
+    margin-left: 12px;
+    font-size: 20px;
+    color: #000;
+  }
+}
+
+.bannerGrass {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 84px;
+  height: 93px;
+  transform: translate3d(-50%, 30%, 0);
+}
+
+.bannerCoin {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 100px;
+  height: 100px;
+  transform: translate3d(50%, 30%, 0);
+}
+
+.list {
+  position: relative;
+  width: 100vw;
+  min-height: 832px;
+  padding: 76px 0 144px 0;
+  box-sizing: border-box;
+  background-color: #232323;
+
+  .star {
+    position: absolute;
+    top: 122px;
+    left: 67px;
+    width: 284px;
+    height: 284px;
+  }
+
+  .squar {
+    position: absolute;
+    top: 347px;
+    right: 73px;
+    width: 141px;
+    height: 141px;
+  }
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 316px;
+  background-color: #E4E4E4;
+
+  .sponsorTip {
+    font-size: 14px;
+    color: #555;
+  }
+}
+
+@media screen and (max-device-width:1440px) {
+  .headerContent {
+    padding-top: 225px;
+  }
+  .title {
+    font-size: 56px;
+  }
+  .reward {
+    font-size: 56px;
+  }
+}

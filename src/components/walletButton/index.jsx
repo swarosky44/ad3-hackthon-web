@@ -5,10 +5,10 @@ import styles from './index.less';
 
 const STYLE_OPTIONS = {
   middle: {
-    height: '24px',
+    height: '48px',
     padding: '0 24px',
-    lineHeight: '21px',
-    borderRadius: '12px',
+    lineHeight: '42px',
+    borderRadius: '24px',
     fontSize: '16px',
   },
   large: {
@@ -41,15 +41,21 @@ export default ({ size = 'middle' }) => {
   };
 
   useEffect(() => {
-    if (hadInstallMetaMask && !account) {
-      connectWallet();
-    }
+    // if (hadInstallMetaMask && !account) {
+    //   connectWallet();
+    // }
   }, []);
 
   return hadInstallMetaMask ? (
     account && account[0] ? (
       <Tooltip placement="bottom" title={account[0]}>
-        <span className={styles.account}>{formatAddress(account[0])}</span>
+
+        <div
+          className={styles.wallet}
+          style={styleOption}
+        >
+          {formatAddress(account[0])}
+        </div>
       </Tooltip>
     ) : (
       <div
@@ -57,7 +63,7 @@ export default ({ size = 'middle' }) => {
         style={styleOption}
         onClick={connectWallet}
       >
-        connect
+        Connect Wallet
       </div>
     )
   ) : (

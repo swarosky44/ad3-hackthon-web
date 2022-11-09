@@ -30,6 +30,13 @@ export default defineConfig({
   },
   routes: [
     {
+      path: '/task',
+      component: '@/layouts/designLayout',
+      routes: [
+        { path: '/:id', component: '@/pages/task' },
+      ],
+    },
+    {
       path: '/',
       component: '@/layouts/index',
       routes: [

@@ -1,3 +1,24 @@
+* {
+  line-height: 1.2;
+  font-family: "PingFang SC", "Microsoft Yahei", sans-serif;
+}
+
+@font-face {
+  font-family: "Bungee-Regular";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/static/fonts/Bungge-Regular.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Poppins-Regular";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/static/fonts/Poppins-Regular.woff2) format("woff2");
+}
+
 .ant-list-empty-text {
   font-size: 66px;
   color: #49ecbd;
