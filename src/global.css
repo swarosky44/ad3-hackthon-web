@@ -8,7 +8,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(/static/fonts/Bungge-Regular.woff2) format("woff2");
+  src: url(/static/Bungge-Regular.woff2) format("woff2");
 }
 
 @font-face {
@@ -16,7 +16,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(/static/fonts/Poppins-Regular.woff2) format("woff2");
+  src: url(/static/Poppins-Regular.woff2) format("woff2");
 }
 
 @font-face {
@@ -24,7 +24,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(/static/fonts/Poppins-Bold.woff2) format("woff2");
+  src: url(/static/Poppins-Bold.woff2) format("woff2");
 }
 
 @font-face {
