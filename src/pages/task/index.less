@@ -127,6 +127,109 @@
     width: 141px;
     height: 141px;
   }
+
+  .listContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .taskLine {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 0 36px;
+      width: 1200px;
+      height: 170px;
+      border: 3px solid #000;
+      border-radius: 12px;
+      margin-bottom: 36px;
+      background-color: #fff;
+      &:hover {
+        box-shadow: 10px 10px 0 0 #C697E1;
+      }
+
+      .taskContent {
+        flex: 1;
+      }
+
+      .taskTitle {
+        margin-bottom: 10px;
+        font-size: 28px;
+        font-family: "Poppins-Bold";
+      }
+
+      .taskDesc {
+        font-size: 24px;
+        font-weight: "Poppins-Regular";
+      }
+
+      .taskBtn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 312px;
+        height: 56px;
+        border: 3px solid #000;
+        border-radius: 12px;
+        font-size: 20px;
+        font-family: "Inter-Bold";
+        color: #000;
+        background-color: #CDF590;
+      }
+    }
+
+    .listWrap {
+      display: flex;
+      flex-direction: column;
+      width: 1200px;
+
+      .taskCard {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        min-width: 384px;
+        max-width: 588px;
+        height: 276px;
+        padding: 40px;
+        border: 3px solid #000;
+        border-radius: 12px;
+        background-color: #fff;
+  
+        &:hover {
+          box-shadow: 10px 10px 0 0 #C697E1;
+        }
+  
+        .taskTitle {
+          margin-bottom: 10px;
+          font-size: 28px;
+          font-family: "Poppins-Bold";
+          color: #000;
+        }
+
+        .taskDesc {
+          font-size: 24px;
+          font-family: "Poppins-Regular";
+        }
+
+        .taskBtn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 24px;
+          margin-left: 50%;
+          width: 312px;
+          height: 56px;
+          border: 3px solid #000;
+          border-radius: 12px;
+          font-size: 20px;
+          font-family: "Inter-Bold";
+          color: #000;
+          background-color: #CDF590;
+          transform: translate3d(-50%, 0, 0);
+        }
+      }
+    }
+  }
 }
 
 .footer {

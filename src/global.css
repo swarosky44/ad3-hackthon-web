@@ -19,6 +19,22 @@
   src: url(/static/fonts/Poppins-Regular.woff2) format("woff2");
 }
 
+@font-face {
+  font-family: "Poppins-Bold";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/static/fonts/Poppins-Bold.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Inter-Bold";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/static/fonts/Inter-Bold.woff2) format("woff2");
+}
+
 .ant-list-empty-text {
   font-size: 66px;
   color: #49ecbd;
