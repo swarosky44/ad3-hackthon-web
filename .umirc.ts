@@ -29,11 +29,22 @@ export default defineConfig({
     type: 'hash',
   },
   routes: [
+    // 广告主工作台
+    {
+      path: '/backend',
+      component: '@/layouts/backendLayout',
+      routes: [
+        { path: 'list', component: '@/pages/backend/list', title: 'ad3' },
+        { path: 'create', component: '@/pages/backend/create', title: 'ad3' },
+        { path: 'detail/:id', component: '@/pages/backend/detail', title: 'ad3' },
+      ],
+    },
+    // 任务详情页
     {
       path: '/task',
       component: '@/layouts/designLayout',
       routes: [
-        { path: '/:id', component: '@/pages/task' },
+        { path: ':id', component: '@/pages/task', title: 'ad3' },
       ],
     },
     {

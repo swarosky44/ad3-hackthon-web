@@ -5,8 +5,6 @@ import styles from './index.less';
 import 'antd/dist/antd.css';
 
 export default (props) => {
-  useEffect(() => {}, []);
-
   return (
     <div className={styles.page}>
       <Header />
