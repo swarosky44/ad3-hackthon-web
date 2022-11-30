@@ -26,60 +26,24 @@ export default defineConfig({
   },
   // 路由
   history: {
-    type: 'hash',
+    type: 'browser',
   },
   routes: [
-    // 运营页面
-    {
-      path: '/internal',
-      component: '@/layouts/internalLayout',
-      routes: [
-        { path: ':id', component: '@/pages/internal', title: 'ad3' },
-      ],
-    },
-    // 广告主工作台
-    {
-      path: '/backend',
-      component: '@/layouts/backendLayout',
-      routes: [
-        { path: 'list', component: '@/pages/backend/list', title: 'ad3' },
-        { path: 'create', component: '@/pages/backend/create', title: 'ad3' },
-        { path: 'detail/:id', component: '@/pages/backend/detail', title: 'ad3' },
-      ],
-    },
-    // 任务详情页
-    {
-      path: '/task',
-      component: '@/layouts/designLayout',
-      routes: [
-        { path: ':id', component: '@/pages/task', title: 'ad3' },
-      ],
-    },
-    // 授权中转页
-    {
-      path: '/auth',
-      component: '@/layouts/blankLayout',
-      routes: [
-        { path: 'twitter', component: '@/pages/auth/twitter', title: 'ad3' },
-      ],
-    },
     {
       path: '/',
       component: '@/layouts/index',
       routes: [
-        { path: '/', redirect: '/home' },
-        { path: '/home', component: '@/pages/home', title: 'ad3' },
-        { path: '/adventure3', component: '@/pages/adventure3', title: 'ad3' },
-        { path: '/native', component: '@/pages/native', title: 'ad3' },
-        { path: '/test', component: '@/pages/test', title: 'ad3' },
+        { path: '/internal', component: '@/pages/internal', title: 'ad3' },
+        { path: '/task', component: '@/pages/task', title: 'ad3' },
+        { path: '/auth', component: '@/pages/auth', title: 'ad3' },
       ],
     },
   ],
   // 代理
   proxy: {
     '/api': {
-      "target": 'https://www.adventure3.tk/',
-      'changeOrigin': true,
+      target: 'https://www.adventure3.tk/',
+      changeOrigin: true,
     },
   },
   fastRefresh: {},
