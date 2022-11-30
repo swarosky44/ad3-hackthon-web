@@ -29,6 +29,14 @@ export default defineConfig({
     type: 'hash',
   },
   routes: [
+    // 运营页面
+    {
+      path: '/internal',
+      component: '@/layouts/internalLayout',
+      routes: [
+        { path: ':id', component: '@/pages/internal', title: 'ad3' },
+      ],
+    },
     // 广告主工作台
     {
       path: '/backend',
@@ -47,6 +55,14 @@ export default defineConfig({
         { path: ':id', component: '@/pages/task', title: 'ad3' },
       ],
     },
+    // 授权中转页
+    {
+      path: '/auth',
+      component: '@/layouts/blankLayout',
+      routes: [
+        { path: 'twitter', component: '@/pages/auth/twitter', title: 'ad3' },
+      ],
+    },
     {
       path: '/',
       component: '@/layouts/index',
@@ -59,5 +75,12 @@ export default defineConfig({
       ],
     },
   ],
+  // 代理
+  proxy: {
+    '/api': {
+      "target": 'https://www.adventure3.tk/',
+      'changeOrigin': true,
+    },
+  },
   fastRefresh: {},
 });

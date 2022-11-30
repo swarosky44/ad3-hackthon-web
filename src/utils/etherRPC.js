@@ -23,7 +23,6 @@ export default class EthereumRpc {
 
       // Get user's Ethereum public address
       const address = await signer.getAddress();
-
       return address;
     } catch (error) {
       return error;

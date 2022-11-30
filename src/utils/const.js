@@ -20,7 +20,7 @@ export const TASK_TYPE = [
 export const WEB3_AUTH_CLIENT_ID =
   'BHX7lStczgqkZhVfnEskrWF1ffJlxr9uX3uXwxtoXEgs61kk__luNQgx_q0HMuogmDEA85B1mYuUQZecth606ow';
 
-export const API_PREFIX = 'https://www.adventure3.tk';
+export const API_PREFIX = location.origin;
 
 export const TASK_STATUS_MAP = [
   "pending",

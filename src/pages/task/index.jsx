@@ -1,14 +1,23 @@
 import { useEffect, useState } from "react";
-import { List } from "antd";
+import { List, message } from "antd";
+import { useModel } from 'umi';
+import TwitterAuthModal from './twitterAuthModal';
 import { request } from '../../utils/request';
 import { TASK_STATUS_MAP } from '../../utils/const';
+
 import styles from "./index.less";
 
 export default () => {
   const [campaign, setCampaign] = useState(null);
   const [taskList, setTaskList] = useState([]);
   const [campaignStatus, setCampaignStatus] = useState(TASK_STATUS_MAP[0]);
+  const [twitterAuthUrl, setTwitterAuthUrl] = useState('');
+  const { ad3Account, queryTwitterAuth } = useModel('global', (model) => ({
+    ad3Account: model.ad3Account,
+    queryTwitterAuth: model.queryTwitterAuth,
+  }));
 
+  // 获取任务详情
   const getTaskDetail = async () => {
     const ret = await request({
       method: 'GET',
@@ -34,12 +43,30 @@ export default () => {
     return `${Y}-${M >= 10 ? M : `0${M}`}-${D >= 10 ? D : `0${D}`}`;
   };
 
+  // 完成任务
+  const onFinishedTask = async () => {
+    // 已登录 AD3 账号 && 已获取 twitter 授权
+    if (ad3Account && ad3Account.address && ad3Account.username) {
+      // TODO
+    } else if (ad3Account && ad3Account.address) {
+      // 已登录 AD3 账号 && 未获取 twitter 授权
+      const result = await queryTwitterAuth();
+      if (result && result.result) {
+        setTwitterAuthUrl(result.result);
+      }
+    } else {
+      message.warn('Please connect wallet first');
+    }
+  };
+
   // 渲染列表
   const renderList = () => {
-    console.info(taskList);
     if (taskList.length <= 3) {
       return taskList.map((l, i) => (
-        <div className={styles.taskLine}>
+        <div
+          className={styles.taskLine}
+          onClick={onFinishedTask}
+        >
           <div className={styles.taskContent}>
             <div className={styles.taskTitle}>TASK{i + 1}</div>
             <div className={styles.taskDesc}>{l.task.action.actionDetail}</div>
@@ -58,7 +85,10 @@ export default () => {
             dataSource={taskList}
             renderItem={(l, i) => (
               <List.Item>
-                <div className={styles.taskCard}>
+                <div
+                  className={styles.taskCard}
+                  onClick={onFinishedTask}
+                >
                   <div className={styles.taskContent}>
                     <div className={styles.taskTitle}>TASK{i + 1}</div>
                     <div className={styles.taskDesc}>{l.task.action.actionDetail}</div>
@@ -81,7 +111,10 @@ export default () => {
             dataSource={taskList}
             renderItem={(l, i) => (
               <List.Item>
-                <div className={styles.taskCard}>
+                <div
+                  className={styles.taskCard}
+                  onClick={onFinishedTask}
+                >
                   <div className={styles.taskContent}>
                     <div className={styles.taskTitle}>TASK{i + 1}</div>
                     <div className={styles.taskDesc}>{l.task.action.actionDetail}</div>
@@ -157,6 +190,12 @@ export default () => {
             T&C，The final interpretation of this activity belongs to (Project Name).T&C, the final interpretation of this activity belongs to (Project Name).
           </p>
         </div>
+        {twitterAuthUrl ? (
+          <TwitterAuthModal
+            url={twitterAuthUrl}
+            close={() => setTwitterAuthUrl('')}
+          />
+        ) : null}
       </div>
     );
   }
