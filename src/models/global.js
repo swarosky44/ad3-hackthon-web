@@ -1,10 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { installedMetaMask } from '@/utils';
-import { request } from "@/utils/request";
+import { request } from '@/utils/request';
 
 export default () => {
-  const [hadInstallMetaMask, setHadInstallMetaMask] = useState(installedMetaMask());
+  const [hadInstallMetaMask, setHadInstallMetaMask] = useState(
+    installedMetaMask(),
+  );
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
   // 用户钱包
@@ -43,7 +45,7 @@ export default () => {
   };
 
   // 用户钱包登录 AD3 账户
-  const queryUserAccount = async () => {
+  const loginAd3Account = async () => {
     await request({
       method: 'GET',
       api: 'api/auth/loginWithAddress',
@@ -51,6 +53,11 @@ export default () => {
         address: account[0],
       },
     });
+    queryAd3Account();
+  };
+
+  // 查询 AD3 账户信息
+  const queryAd3Account = async () => {
     const result = await request({
       method: 'GET',
       api: 'api/auth/queryAccountInfo',
@@ -59,6 +66,7 @@ export default () => {
     if (result && result.result && result.result.address) {
       setAd3Account(result.result);
     }
+    return result;
   };
 
   // 链接钱包
@@ -68,7 +76,7 @@ export default () => {
       const account = await provider
         .send('eth_requestAccounts', [])
         .catch(() => console.log('user rejected request'));
-  
+
       setProvider(provider);
       setAccount(account);
       setSigner(provider.getSigner());
@@ -76,15 +84,16 @@ export default () => {
   }, []);
 
   // 获取 twitter 授权
-  const queryTwitterAuth = async () => await request({
-    method: 'GET',
-    api: 'api/auth/queryAuthUrl',
-    params: {},
-  });
+  const queryTwitterAuth = async () =>
+    await request({
+      method: 'GET',
+      api: 'api/auth/queryAuthUrl',
+      params: {},
+    });
 
   useEffect(() => {
     if (account && account[0]) {
-      queryUserAccount();
+      loginAd3Account();
     }
   }, [account]);
 
@@ -95,6 +104,7 @@ export default () => {
     ad3Account,
     connectWallet,
     queryTwitterAuth,
+    queryAd3Account,
     hadInstallMetaMask,
     ad3Account,
   };
