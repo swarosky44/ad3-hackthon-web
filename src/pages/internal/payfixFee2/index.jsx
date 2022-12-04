@@ -8,23 +8,20 @@ export default ({ contract, signer, data, kols }) => {
   const { contractAddress } = data;
   const [checkButton, setCheckButton] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
- 
+
   const payFixFee1 = async () => {
     try {
       const signerAddress = await signer.getAddress();
       const campaignAddressList = await contract.getCampaignAddressList(
         signerAddress,
       );
-      const campaignIndex = campaignAddressList.findIndex(l => l === contractAddress);
-      await contract.payfixFee(
-        selectedRowKeys,
-        signerAddress,
-        campaignIndex,
-        {
-          gasLimit: 15000000,
-          gasPrice: 10 * 10 ** 9,
-        },
+      const campaignIndex = campaignAddressList.findIndex(
+        (l) => l === contractAddress,
       );
+      await contract.payfixFee(selectedRowKeys, signerAddress, campaignIndex, {
+        gasLimit: 15000000,
+        gasPrice: 10 * 10 ** 9,
+      });
       setCheckButton(true);
     } catch (error) {
       Modal.warn({
@@ -41,9 +38,11 @@ export default ({ contract, signer, data, kols }) => {
       title: '查询合约',
       content: (
         <Descriptions title="合约信息" column={1} bordered>
-          <Descriptions.Item label="合约资金">{balance.toNumber()}</Descriptions.Item>
+          <Descriptions.Item label="合约资金">
+            {balance.toNumber()}
+          </Descriptions.Item>
         </Descriptions>
-      )
+      ),
     });
   };
 
@@ -51,19 +50,23 @@ export default ({ contract, signer, data, kols }) => {
     <div className={styles.module}>
       <Table
         columns={[
-          { title: 'KOL 钱包地址', dataIndex: '_address', key: '_address' },
+          { title: 'KOL 钱包地址', dataIndex: 'kolAddress', key: 'kolAddress' },
           { title: '内容制作费', dataIndex: 'fixedFee', key: 'fixedFee' },
           { title: '抽成比例', dataIndex: 'ratio', key: 'ratio' },
-          { title: '定金支付阶段', dataIndex: '_paymentStage', key: 'paymentStage' },
+          {
+            title: '定金支付阶段',
+            dataIndex: 'paymentStage',
+            key: 'paymentStage',
+          },
         ]}
-        rowKey="_address"
+        rowKey="kolAddress"
         dataSource={kols}
         pagination={false}
         rowSelection={{
           selectedRowKeys,
-          onChange: v => {
+          onChange: (v) => {
             console.info(v);
-            setSelectedRowKeys(v)
+            setSelectedRowKeys(v);
           },
         }}
       />

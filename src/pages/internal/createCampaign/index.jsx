@@ -59,11 +59,14 @@ export default ({
           contractAddress: campaignAddress,
           projectAddress: signerAddress,
         });
-        localStorage.setItem('campaignData', {
-          ...data,
-          contractAddress: campaignAddress,
-          projectAddress: signerAddress,
-        });
+        localStorage.setItem(
+          'campaignData',
+          JSON.stringify({
+            ...data,
+            contractAddress: campaignAddress,
+            projectAddress: signerAddress,
+          }),
+        );
         Modal.success({
           title: '创建订单合约成功',
           content: (

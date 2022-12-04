@@ -11,72 +11,76 @@ import WithDraw from './withDraw';
 import AD3HubAbi from './AD3Hub.json';
 import styles from './index.less';
 
+const defaultCampaignData = {
+  contractAddress: '',
+  projectAddress: '',
+  campaignName:
+    'Magipop DAO NFT launch！！！Finish task and get the access to mint NFT',
+  startDate: '2022-12-08 23:00:00',
+  endDate: '2022-12-12 23:59:59',
+  kolScope: 'PUBLIC',
+  kolRelationDTOS: [
+    {
+      kolAddress: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+      contentFee: 250,
+      conversionRate: 0,
+    },
+    {
+      kolAddress: '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC',
+      contentFee: 130,
+      conversionRate: 0,
+    },
+  ],
+  contentFee: 0,
+  conversionRate: 0,
+  contentDeadLine: '2022-12-12 23:59:59',
+  rewardDTOS: [
+    {
+      desc: 'USDT',
+      type: 'TOKEN',
+      winnersNum: 200,
+      quota: 100000,
+      unit: 'USDT',
+    },
+  ],
+  taskDTOS: [
+    {
+      name: 'FOLLOW BUBBLE',
+      desc: 'follow bubble',
+      type: 'SOCIAL_MEDIA',
+      subType: 'FOLLOW',
+      channel: 'TWITTER',
+      actionObject: 'https://twitter.com/intent/follow?screen_name=deritrade',
+    },
+    {
+      name: 'FORWARD TWITTER',
+      desc: 'forward twitter',
+      type: 'SOCIAL_MEDIA',
+      subType: 'FORWARD',
+      channel: 'TWITTER',
+      actionObject:
+        'https://twitter.com/intent/retweet?tweet_id=1580528778840768513',
+    },
+    {
+      name: 'Mint NFT',
+      desc: 'click link and mint NFT',
+      type: 'SOCIAL_MEDIA',
+      subType: 'LIKE',
+      channel: '',
+      actionObject: 'https://portal.quest3.xyz/',
+    },
+  ],
+};
 const ad3HubAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
 const ad3TokenAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
 export default () => {
+  const localCampaignData = localStorage.getItem('campaignData');
   const [activeKey, setActiveKey] = useState('createCampaign');
   const [ad3HubContract, setAd3HubContract] = useState(null);
   const [ad3Token, setAd3Token] = useState(null);
-  const [campaginData, setCampaignData] = useState({
-    contractAddress: '',
-    projectAddress: '',
-    campaignName:
-      'Magipop DAO NFT launch！！！Finnish task and get the access to mint NFT',
-    startDate: '2022-12-08 23:00:00',
-    endDate: '2022-12-12 23:59:59',
-    kolScope: 'PUBLIC',
-    kolRelationDTOS: [
-      {
-        kolAddress: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
-        contentFee: 250,
-        conversionRate: 0,
-      },
-      {
-        kolAddress: '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC',
-        contentFee: 130,
-        conversionRate: 0,
-      },
-    ],
-    contentFee: 0,
-    conversionRate: 0,
-    contentDeadLine: '2022-12-12 23:59:59',
-    rewardDTOS: [
-      {
-        desc: 'USDT',
-        type: 'TOKEN',
-        winnersNum: 200,
-        quota: 100000,
-        unit: 'USDT',
-      },
-    ],
-    taskDTOS: [
-      {
-        name: 'FOLLOW BUBBLE',
-        desc: 'folow bubble',
-        type: 'SOCIAL_MEDIA',
-        subType: 'FOLLOW',
-        channel: 'TWITTER',
-        actionObject: 'https://twitter.com/intent/follow?screen_name=deritrade',
-      },
-      {
-        name: 'FORWARD TWITTER',
-        desc: 'forward twitter',
-        type: 'SOCIAL_MEDIA',
-        subType: 'FORWARD',
-        channel: 'TWITTER',
-        actionObject:
-          'https://twitter.com/intent/retweet?tweet_id=1580528778840768513',
-      },
-      {
-        name: 'Mint NFT',
-        desc: 'click link and mint NFT',
-        type: 'SOCIAL_MEDIA',
-        subType: 'LIKE',
-        channel: '',
-        actionObject: 'https://portal.quest3.xyz/',
-      },
-    ],
-  });
+  const [campaginData, setCampaignData] = useState(
+    localCampaignData ? JSON.parse(localCampaignData) : defaultCampaignData,
+  );
   const { signer } = useModel('global', (model) => ({
     signer: model.signer,
   }));
