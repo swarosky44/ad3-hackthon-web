@@ -21,7 +21,8 @@ import styles from '../index.less';
 //     ],
 //   },
 // ];
-export default ({ contract = {}, signer = {} }) => {
+export default ({ contract = {}, signer = {}, data }) => {
+  const { contractAddress } = data;
   const [checkButton, setCheckButton] = useState(false);
   const [campaignResult, setCampaignResult] = useState([]);
 
@@ -30,28 +31,18 @@ export default ({ contract = {}, signer = {} }) => {
     const campaignAddressList = await contract.getCampaignAddressList(
       signerAddress,
     );
-    await contract.pushPay(
-      signerAddress,
-      campaignAddressList.length,
-      campaignResult,
-      {
-        gasLimit: 15000000,
-        gasPrice: 10 * 10 ** 9,
-      },
+    const campaignIndex = campaignAddressList.findIndex(
+      (l) => l === contractAddress,
     );
+    await contract.pushPayKol(signerAddress, campaignIndex, campaignResult, {
+      gasLimit: 15000000,
+      gasPrice: 10 * 10 ** 9,
+    });
     setCheckButton(true);
   };
 
   const checkBalance = async () => {
-    const signerAddress = await signer.getAddress();
-    const campaignAddressList = await contract.getCampaignAddressList(
-      signerAddress,
-    );
-    const campaignAddress = await contract.getCampaignAddress(
-      signerAddress,
-      campaignAddressList.length,
-    );
-    const Campaign = new ethers.Contract(campaignAddress, CampaignAbi, signer);
+    const Campaign = new ethers.Contract(contractAddress, CampaignAbi, signer);
     const balance = await Campaign.remainBalance();
     Modal.success({
       title: '查询合约',
@@ -77,8 +68,8 @@ export default ({ contract = {}, signer = {} }) => {
     if (ret && ret.result && ret.result.length) {
       setCampaignResult(
         ret.result.map((r) => ({
-          _address: r.kolAddress,
-          cnt: r.cnt,
+          kolAddress: r.kolAddress,
+          quantity: r.cnt,
         })),
       );
     }
