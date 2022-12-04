@@ -17,6 +17,7 @@ const { campaignId = '', kolId = '' } = location.search
   }, {});
 export default () => {
   const [campaign, setCampaign] = useState(null);
+  const [reward, setReward] = useState(null);
   const [taskList, setTaskList] = useState([]);
   const [campaignInstance, setCampaignInstance] = useState(null);
   const [loginModalVisible, setLoginModalVisible] = useState(false);
@@ -26,16 +27,21 @@ export default () => {
 
   // 获取任务详情
   const getTaskDetail = async () => {
+    const params = {
+      campaignId: +campaignId,
+      kolId: +kolId,
+    };
+    if (ad3Account && ad3Account.address) {
+      params.address = ad3Account.address;
+    }
     if (campaignId && kolId) {
       const ret = await request({
         method: 'GET',
         api: 'api/campaign/queryCampaign',
-        params: {
-          campaignId: +campaignId,
-          kolId: +kolId,
-        },
+        params,
       });
       if (ret && ret.result) {
+        setReward(ret.result.reward);
         setCampaign(ret.result.campaign);
         setTaskList(ret.result.taskInstanceList);
         setCampaignInstance(ret.result.campaignInstance);
@@ -55,12 +61,13 @@ export default () => {
 
   // 完成任务
   const onFinishedTask = async (task) => {
+    // 登录状态检查
     if (!ad3Account || !ad3Account.address) {
       setLoginModalVisible(true);
       return;
     }
 
-    // campaign 状态
+    // campaign 状态检查
     if (campaignInstance.status === 'pending') {
       message.warn('campaign is pending');
       return;
@@ -69,7 +76,7 @@ export default () => {
       return;
     }
 
-    // task 状态
+    // task 状态检查
     if (task.taskInstance.status === 'pending') {
       message.warn('campaign is pending');
       return;
@@ -77,17 +84,38 @@ export default () => {
       message.warn('campaign is pending');
       return;
     }
+
+    // 执行任务
+    const ret = await request({
+      method: 'GET',
+      api: 'api/campaign/finishTask',
+      params: {
+        address: ad3Account.address,
+        kolId: +kolId,
+        taskId: task.task.taskId,
+      },
+    });
+    if (ret && `${ret.result}` === 'true') {
+      getTaskDetail();
+    }
   };
 
   useEffect(() => {
     getTaskDetail();
   }, []);
 
+  useEffect(() => {
+    if (ad3Account && ad3Account.address) {
+      getTaskDetail();
+    }
+  }, [ad3Account]);
+
   if (campaign && campaignInstance && taskList.length) {
     return (
       <div>
         {isMobile ? (
           <MobileContent
+            reward={reward}
             campaign={campaign}
             campaignInstance={campaignInstance}
             taskList={taskList}
@@ -96,6 +124,7 @@ export default () => {
           />
         ) : (
           <PcContent
+            reward={reward}
             campaign={campaign}
             taskList={taskList}
             formatTime={formatTime}

@@ -105,6 +105,12 @@ export default () => {
     }
   }, [account]);
 
+  useEffect(() => {
+    if (hadInstallMetaMask) {
+      connectWallet();
+    }
+  }, []);
+
   return {
     signer,
     provider,
