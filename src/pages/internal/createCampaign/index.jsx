@@ -90,7 +90,7 @@ export default ({
                 {campaignAddress}
               </Descriptions.Item>
               <Descriptions.Item label="合约资金">
-                {balance.toNumber()}
+                {ethers.utils.formatUnits(balance.toNumber(), 6)}
               </Descriptions.Item>
             </Descriptions>
           ),

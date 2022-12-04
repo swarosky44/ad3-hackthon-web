@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Modal, Descriptions } from 'antd';
 import { ethers } from 'ethers';
 import CampaignAbi from '../Campaign.json';
-import styles from "../index.less";
+import styles from '../index.less';
 
 export default ({ contract = {}, signer = {} }) => {
   const [checkButton, setCheckButton] = useState(false);
@@ -12,10 +12,7 @@ export default ({ contract = {}, signer = {} }) => {
     const campaignAddressList = await contract.getCampaignAddressList(
       signerAddress,
     );
-    await contract.withdraw(
-      signerAddress,
-      campaignAddressList.length,
-    );
+    await contract.withdraw(signerAddress, campaignAddressList.length);
     setCheckButton(true);
   };
 
@@ -34,9 +31,11 @@ export default ({ contract = {}, signer = {} }) => {
       title: '查询合约',
       content: (
         <Descriptions title="合约信息" column={1} bordered>
-          <Descriptions.Item label="合约资金">{balance.toNumber()}</Descriptions.Item>
+          <Descriptions.Item label="合约资金">
+            {ethers.utils.formatUnits(balance.toNumber(), 6)}
+          </Descriptions.Item>
         </Descriptions>
-      )
+      ),
     });
   };
 

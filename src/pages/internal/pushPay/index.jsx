@@ -33,7 +33,7 @@ export default ({ contract = {}, signer = {}, data }) => {
       content: (
         <Descriptions title="合约信息" column={1} bordered>
           <Descriptions.Item label="合约资金">
-            {balance.toNumber()}
+            {ethers.utils.formatUnits(balance.toNumber(), 6)}
           </Descriptions.Item>
         </Descriptions>
       ),
