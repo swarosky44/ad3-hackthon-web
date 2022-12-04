@@ -16,15 +16,16 @@ export default ({
   signer = {},
   setCampaignData = () => {},
 }) => {
-
   // 创建合约
   const createCampaign = async () => {
     try {
       await token.approve(ad3HubAddress, 10 * budget);
+      console.info(kols);
       await contract.createCampaign(kols, budget, 10, {
         gasLimit: 15000000,
         gasPrice: 10 * 10 ** 9,
       });
+      console.info(2);
       //Check campaign's address
       const signerAddress = await signer.getAddress();
       const campaignAddressList = await contract.getCampaignAddressList(
@@ -35,7 +36,11 @@ export default ({
         campaignAddressList.length,
       );
       // Check campaign's balance
-      const Campaign = new ethers.Contract(campaignAddress, CampaignAbi, signer);
+      const Campaign = new ethers.Contract(
+        campaignAddress,
+        CampaignAbi,
+        signer,
+      );
       const balance = await Campaign.remainBalance();
 
       const result = await request({
@@ -54,14 +59,23 @@ export default ({
           contractAddress: campaignAddress,
           projectAddress: signerAddress,
         });
+        localStorage.setItem('campaignData', {
+          ...data,
+          contractAddress: campaignAddress,
+          projectAddress: signerAddress,
+        });
         Modal.success({
           title: '创建订单合约成功',
           content: (
             <Descriptions title="合约信息" column={1} bordered>
-              <Descriptions.Item label="合约地址">{campaignAddress}</Descriptions.Item>
-              <Descriptions.Item label="合约资金">{balance.toNumber()}</Descriptions.Item>
+              <Descriptions.Item label="合约地址">
+                {campaignAddress}
+              </Descriptions.Item>
+              <Descriptions.Item label="合约资金">
+                {balance.toNumber()}
+              </Descriptions.Item>
             </Descriptions>
-          )
+          ),
         });
       } else {
         Modal.warn({
@@ -100,9 +114,21 @@ export default ({
         <Descriptions.Item label="KOL 信息">
           <Table
             columns={[
-              { title: 'KOL 钱包地址', dataIndex: 'kolAddress', key: 'kolAddress' },
-              { title: '内容制作费', dataIndex: 'contentFee', key: 'contentFee' },
-              { title: '抽成比例', dataIndex: 'conversionRate', key: 'conversionRate' },
+              {
+                title: 'KOL 钱包地址',
+                dataIndex: 'kolAddress',
+                key: 'kolAddress',
+              },
+              {
+                title: '内容制作费',
+                dataIndex: 'contentFee',
+                key: 'contentFee',
+              },
+              {
+                title: '抽成比例',
+                dataIndex: 'conversionRate',
+                key: 'conversionRate',
+              },
             ]}
             rowKey="kolAddress"
             dataSource={data.kolRelationDTOS}

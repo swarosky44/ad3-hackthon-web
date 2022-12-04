@@ -20,7 +20,8 @@ export default () => {
   const [campaginData, setCampaignData] = useState({
     contractAddress: '',
     projectAddress: '',
-    campaignName: 'Magipop DAO',
+    campaignName:
+      'Magipop DAO NFT launch！！！Finnish task and get the access to mint NFT',
     startDate: '2022-12-08 23:00:00',
     endDate: '2022-12-12 23:59:59',
     kolScope: 'PUBLIC',
@@ -55,6 +56,7 @@ export default () => {
         type: 'SOCIAL_MEDIA',
         subType: 'FOLLOW',
         channel: 'TWITTER',
+        actionObject: 'https://twitter.com/intent/follow?screen_name=deritrade',
       },
       {
         name: 'FORWARD TWITTER',
@@ -62,6 +64,16 @@ export default () => {
         type: 'SOCIAL_MEDIA',
         subType: 'FORWARD',
         channel: 'TWITTER',
+        actionObject:
+          'https://twitter.com/intent/retweet?tweet_id=1580528778840768513',
+      },
+      {
+        name: 'Mint NFT',
+        desc: 'click link and mint NFT',
+        type: 'SOCIAL_MEDIA',
+        subType: 'LIKE',
+        channel: '',
+        actionObject: 'https://portal.quest3.xyz/',
       },
     ],
   });
@@ -85,14 +97,13 @@ export default () => {
     return result;
   }, [campaginData]);
 
-
   const kols = useMemo(() => {
     if (campaginData && campaginData.kolRelationDTOS) {
-      return campaginData.kolRelationDTOS.map(k => ({
-        _address: k.kolAddress,
+      return campaginData.kolRelationDTOS.map((k) => ({
+        kolAddress: k.kolAddress,
         fixedFee: k.contentFee,
         ratio: k.conversionRate,
-        _paymentStage: 0,
+        paymentStage: 0,
       }));
     }
     return [];
@@ -155,7 +166,7 @@ export default () => {
               data={campaginData}
               signer={signer}
               kols={kols}
-            /> 
+            />
           );
         case 'withdraw':
           return (

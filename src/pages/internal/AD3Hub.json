@@ -5,6 +5,25 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "advertiser",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "totalBudget",
+        "type": "uint256"
+      }
+    ],
+    "name": "CreateCampaign",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "previousOwner",
         "type": "address"
       },
@@ -28,20 +47,7 @@
         "type": "address"
       }
     ],
-    "name": "PayContentFee",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "advertiser",
-        "type": "address"
-      }
-    ],
-    "name": "Prepay",
+    "name": "PayFixFee",
     "type": "event"
   },
   {
@@ -71,12 +77,38 @@
     "type": "event"
   },
   {
+    "inputs": [],
+    "name": "_paymentToken",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_trustedSigner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "components": [
           {
             "internalType": "address",
-            "name": "_address",
+            "name": "kolAddress",
             "type": "address"
           },
           {
@@ -91,7 +123,7 @@
           },
           {
             "internalType": "uint256",
-            "name": "_paymentStage",
+            "name": "paymentStage",
             "type": "uint256"
           }
         ],
@@ -111,30 +143,6 @@
       }
     ],
     "name": "createCampaign",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address[]",
-        "name": "kols",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "budget",
-        "type": "uint256"
-      }
-    ],
-    "name": "createCampaignLowGas",
     "outputs": [
       {
         "internalType": "address",
@@ -203,6 +211,19 @@
   },
   {
     "inputs": [],
+    "name": "getTrustedSigner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "owner",
     "outputs": [
       {
@@ -253,7 +274,7 @@
         "components": [
           {
             "internalType": "address",
-            "name": "_address",
+            "name": "kolAddress",
             "type": "address"
           },
           {
@@ -273,8 +294,56 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "advertiser",
+        "type": "address"
+      },
+      {
+        "internalType": "uint64",
+        "name": "campaignId",
+        "type": "uint64"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "kolAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "quantity",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct AD3lib.kolWithUserQuantity[]",
+        "name": "kols",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "pushPayKol",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "campaign",
+        "type": "address"
+      }
+    ],
+    "name": "setCampaignImpl",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -288,6 +357,19 @@
       }
     ],
     "name": "setPaymentToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "trustedSigner",
+        "type": "address"
+      }
+    ],
+    "name": "setTrustedSigner",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
