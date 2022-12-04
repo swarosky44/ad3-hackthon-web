@@ -83,6 +83,14 @@ export default () => {
     }
   }, []);
 
+  // 登出
+  const resetWallet = () => {
+    setProvider(null);
+    setSigner(null);
+    setAccount(null);
+    setAd3Account(null);
+  };
+
   // 获取 twitter 授权
   const queryTwitterAuth = async () =>
     await request({
@@ -103,6 +111,7 @@ export default () => {
     account,
     ad3Account,
     connectWallet,
+    resetWallet,
     queryTwitterAuth,
     queryAd3Account,
     hadInstallMetaMask,

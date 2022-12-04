@@ -1,6 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import { Tooltip } from 'antd';
 import styles from './index.less';
 
 const STYLE_OPTIONS = {
@@ -21,11 +20,13 @@ const STYLE_OPTIONS = {
 };
 export default ({ size = 'middle' }) => {
   const styleOption = STYLE_OPTIONS[size];
-  const { connectWallet, account, hadInstallMetaMask } = useModel(
+  const [walletDetailVisible, setWalletDetailVisible] = useState(false);
+  const { connectWallet, resetWallet, account, hadInstallMetaMask } = useModel(
     'global',
     (model) => ({
       account: model.account,
       connectWallet: model.connectWallet,
+      resetWallet: model.resetWallet,
       hadInstallMetaMask: model.hadInstallMetaMask,
     }),
   );
@@ -48,15 +49,21 @@ export default ({ size = 'middle' }) => {
 
   return hadInstallMetaMask ? (
     account && account[0] ? (
-      <Tooltip placement="bottom" title={account[0]}>
-
-        <div
-          className={styles.wallet}
-          style={styleOption}
-        >
-          {formatAddress(account[0])}
-        </div>
-      </Tooltip>
+      <div
+        className={styles.wallet}
+        style={styleOption}
+        onClick={() => setWalletDetailVisible(!walletDetailVisible)}
+      >
+        {formatAddress(account[0])}
+        {walletDetailVisible ? (
+          <div className={styles.logoutModal} onClick={resetWallet}>
+            <img
+              className={styles.logoutModalImg}
+              src={require('@/static/logout-modal.png')}
+            />
+          </div>
+        ) : null}
+      </div>
     ) : (
       <div
         className={styles.wallet}
@@ -71,7 +78,7 @@ export default ({ size = 'middle' }) => {
       className={styles.wallet}
       style={styleOption}
       onClick={() => {
-        window.open('https://metamask.io/', 'install metamsk');
+        window.open('https://metamask.io/download/', 'install metamsk');
       }}
     >
       Install MetaMask
