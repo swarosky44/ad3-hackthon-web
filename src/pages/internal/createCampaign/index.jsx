@@ -19,12 +19,24 @@ export default ({
   // 创建合约
   const createCampaign = async () => {
     try {
-      await token.approve(ad3HubAddress, 10 * budget);
+      console.log('budget:' + budget);
+      console.log(
+        'budgetValue:' + ethers.utils.parseUnits(budget.toString(), 6),
+      );
+      await token.approve(
+        ad3HubAddress,
+        ethers.utils.parseUnits(budget.toString(), 6),
+      );
       console.info(kols);
-      await contract.createCampaign(kols, budget, 10, {
-        gasLimit: 15000000,
-        gasPrice: 10 * 10 ** 9,
-      });
+      await contract.createCampaign(
+        kols,
+        ethers.utils.parseUnits(budget.toString(), 6),
+        10,
+        {
+          gasLimit: 15000000,
+          gasPrice: 10 * 10 ** 9,
+        },
+      );
       console.info(2);
       //Check campaign's address
       const signerAddress = await signer.getAddress();
@@ -35,6 +47,8 @@ export default ({
         signerAddress,
         campaignAddressList.length,
       );
+      console.log('campaignAddress:' + campaignAddress);
+
       // Check campaign's balance
       const Campaign = new ethers.Contract(
         campaignAddress,
@@ -42,6 +56,7 @@ export default ({
         signer,
       );
       const balance = await Campaign.remainBalance();
+      console.log('balance1:' + balance);
 
       const result = await request({
         method: 'POST',
@@ -113,7 +128,7 @@ export default ({
         </Descriptions.Item>
       </Descriptions>
       <Descriptions title="CreateCampaign 参数信息" bordered column={1}>
-        <Descriptions.Item label="预算">{budget / 10}</Descriptions.Item>
+        <Descriptions.Item label="预算">{budget}</Descriptions.Item>
         <Descriptions.Item label="KOL 信息">
           <Table
             columns={[

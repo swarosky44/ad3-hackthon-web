@@ -23,7 +23,7 @@
     "@ant-design/pro-layout": "^6.5.0",
     "@antv/g2plot": "^2.4.20",
     "antd": "^4.23.1",
-    "ethers": "^5.7.1",
+    "ethers": "^5.5.1",
     "react": "17.x",
     "react-device-detect": "^2.2.2",
     "react-dom": "17.x",
