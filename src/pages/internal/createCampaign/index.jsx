@@ -28,10 +28,18 @@ export default ({
         ethers.utils.parseUnits(budget.toString(), 6),
       );
       console.info(kols);
+      kols = kols.map((s) => ({
+        ...s,
+        fixedFee: ethers.utils.parseUnits(s.fixedFee.toString(), 6),
+      }));
+      console.log('kols:', kols);
       await contract.createCampaign(
-        kols,
+        kols.map((s) => ({
+          ...s,
+          fixedFee: ethers.utils.parseUnits(s.fixedFee.toString(), 6),
+        })),
         ethers.utils.parseUnits(budget.toString(), 6),
-        10,
+        ethers.utils.parseUnits(10 + '', 6),
         {
           gasLimit: 15000000,
           gasPrice: 10 * 10 ** 9,

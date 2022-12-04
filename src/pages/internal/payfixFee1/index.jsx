@@ -18,10 +18,16 @@ export default ({ contract, signer, data, kols }) => {
       const campaignIndex = campaignAddressList.findIndex(
         (l) => l === contractAddress,
       );
-      await contract.payfixFee(selectedRowKeys, signerAddress, campaignIndex, {
-        gasLimit: 15000000,
-        gasPrice: 10 * 10 ** 9,
-      });
+      console.log('selectedRowKeys:', selectedRowKeys);
+      await contract.payfixFee(
+        selectedRowKeys,
+        signerAddress,
+        campaignIndex + 1,
+        {
+          gasLimit: 15000000,
+          gasPrice: 10 * 10 ** 9,
+        },
+      );
       setCheckButton(true);
     } catch (error) {
       Modal.warn({
