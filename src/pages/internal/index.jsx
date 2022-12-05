@@ -11,6 +11,35 @@ import WithDraw from './withDraw';
 import AD3HubAbi from './AD3Hub.json';
 import styles from './index.less';
 
+const { env = 'daily' } = location.search
+  .substr(1)
+  .split('&')
+  .reduce((res, item) => {
+    const parts = item.split('=');
+    res[parts[0]] = parts[1];
+    return res;
+  }, {});
+
+let ad3HubAddress = '';
+let ad3TokenAddress = '';
+if (env === 'daily') {
+  // 本地环境
+  ad3HubAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+  ad3TokenAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
+} else if (env === 'test') {
+  // 测试网环境
+  ad3HubAddress = '0xc1A83b13e858909ac089180D34304259EC3F71Eb';
+  ad3TokenAddress = '0x895d46f3a32f4Eb85dcC275C754aB127194F2559';
+} else if (env === 'main') {
+  // 主网环境
+  ad3HubAddress = '0xc1A83b13e858909ac089180D34304259EC3F71Eb';
+  ad3TokenAddress = '0x895d46f3a32f4Eb85dcC275C754aB127194F2559';
+} else {
+  // 默认本地环境
+  ad3HubAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+  ad3TokenAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
+}
+
 const defaultCampaignData = {
   contractAddress: '',
   projectAddress: '',
@@ -71,8 +100,6 @@ const defaultCampaignData = {
     },
   ],
 };
-const ad3HubAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
-const ad3TokenAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
 export default () => {
   const localCampaignData = localStorage.getItem('campaignData');
   const [activeKey, setActiveKey] = useState('createCampaign');
