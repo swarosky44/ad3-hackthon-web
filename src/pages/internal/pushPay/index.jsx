@@ -5,6 +5,14 @@ import { request } from '../../../utils/request';
 import CampaignAbi from '../Campaign.json';
 import styles from '../index.less';
 
+const { campaignId = '' } = location.search
+  .substr(1)
+  .split('&')
+  .reduce((res, item) => {
+    const parts = item.split('=');
+    res[parts[0]] = parts[1];
+    return res;
+  }, {});
 export default ({ contract = {}, signer = {}, data }) => {
   const { contractAddress } = data;
   const [checkButton, setCheckButton] = useState(false);
@@ -18,10 +26,15 @@ export default ({ contract = {}, signer = {}, data }) => {
     const campaignIndex = campaignAddressList.findIndex(
       (l) => l === contractAddress,
     );
-    await contract.pushPayKol(signerAddress, campaignIndex, campaignResult, {
-      gasLimit: 15000000,
-      gasPrice: 10 * 10 ** 9,
-    });
+    await contract.pushPayKol(
+      signerAddress,
+      campaignIndex + 1,
+      campaignResult,
+      {
+        gasLimit: 15000000,
+        gasPrice: 10 * 10 ** 9,
+      },
+    );
     setCheckButton(true);
   };
 
@@ -46,7 +59,7 @@ export default ({ contract = {}, signer = {}, data }) => {
       method: 'GET',
       api: 'api/campaign/queryCampaignResult',
       params: {
-        campaignId: 15,
+        campaignId,
       },
     });
     if (ret && ret.result && ret.result.length) {
@@ -63,13 +76,15 @@ export default ({ contract = {}, signer = {}, data }) => {
     getPushpayDetail();
   }, []);
 
+  console.info(campaignResult);
   return (
     <div className={styles.module}>
       <Table
         columns={[
-          { title: 'KOL 钱包地址', dataIndex: '_address', key: '_address' },
+          { title: 'KOL 钱包地址', dataIndex: 'kolAddress', key: 'kolAddress' },
+          { title: '带来用户数', dataIndex: 'quantity', key: 'quantity' },
         ]}
-        rowKey="_address"
+        rowKey="kolAddress"
         dataSource={campaignResult}
         pagination={false}
       />

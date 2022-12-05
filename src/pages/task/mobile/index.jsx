@@ -51,19 +51,19 @@ export default ({
         <h2 className={styles.countdownTitle}>End of distance:</h2>
         <div className={styles.countdown}>
           <div className={styles.countdownBlock}>
-            <span className={styles.countdownV}>{D > 10 ? D : `0${D}`}</span>
+            <span className={styles.countdownV}>{D >= 10 ? D : `0${D}`}</span>
             <span className={styles.countdownU}>Days</span>
           </div>
           <div className={styles.countdownBlock}>
-            <span className={styles.countdownV}>{H > 10 ? H : `0${H}`}</span>
+            <span className={styles.countdownV}>{H >= 10 ? H : `0${H}`}</span>
             <span className={styles.countdownU}>Hours</span>
           </div>
           <div className={styles.countdownBlock}>
-            <span className={styles.countdownV}>{m > 10 ? m : `0${m}`}</span>
+            <span className={styles.countdownV}>{m >= 10 ? m : `0${m}`}</span>
             <span className={styles.countdownU}>Minutes</span>
           </div>
           <div className={styles.countdownBlock}>
-            <span className={styles.countdownV}>{s > 10 ? s : `0${s}`}</span>
+            <span className={styles.countdownV}>{s >= 10 ? s : `0${s}`}</span>
             <span className={styles.countdownU}>Seconds</span>
           </div>
         </div>
@@ -128,6 +128,18 @@ export default ({
       </div>
       {renderCountdown()}
       <div className={styles.list}>{renderList()}</div>
+      <div className={styles.description}>
+        <h1 className={styles.descTitle}>Description</h1>
+        <h3 className={styles.descQ}>What is the Benefit of NFT ?</h3>
+        <p className={styles.descA}>
+          creators wonderland. A révolution movement to kick Hollywood's ass
+          off. We co-create, own, and monetize IPs in a web3 way.{' '}
+        </p>
+        <h3 className={styles.descQ}>What is the Benefit of NFT ?</h3>
+        <ul>
+          <li className={styles.descA}>NFT Holder Benefits</li>
+        </ul>
+      </div>
       <div className={styles.reward}>
         <h1 className={styles.rewardTitle}>Reward</h1>
         <div className={styles.rewardContent}>

@@ -9,13 +9,14 @@ export default ({
   ad3HubAddress = '',
   ad3TokenAddress = '',
   contract = {},
-  data = {},
+  defaultCampaignData = {},
   kols = [],
   budget = 0,
   token = {},
   signer = {},
   setCampaignData = () => {},
 }) => {
+  const userFee = 10;
   // 创建合约
   const createCampaign = async () => {
     try {
@@ -27,19 +28,15 @@ export default ({
         ad3HubAddress,
         ethers.utils.parseUnits(budget.toString(), 6),
       );
-      console.info(kols);
       kols = kols.map((s) => ({
         ...s,
         fixedFee: ethers.utils.parseUnits(s.fixedFee.toString(), 6),
       }));
       console.log('kols:', kols);
       await contract.createCampaign(
-        kols.map((s) => ({
-          ...s,
-          fixedFee: ethers.utils.parseUnits(s.fixedFee.toString(), 6),
-        })),
+        kols,
         ethers.utils.parseUnits(budget.toString(), 6),
-        ethers.utils.parseUnits(10 + '', 6),
+        ethers.utils.parseUnits(userFee.toString(), 6),
         {
           gasLimit: 15000000,
           gasPrice: 10 * 10 ** 9,
@@ -51,6 +48,7 @@ export default ({
       const campaignAddressList = await contract.getCampaignAddressList(
         signerAddress,
       );
+      console.info('campaignAddressList', campaignAddressList);
       const campaignAddress = await contract.getCampaignAddress(
         signerAddress,
         campaignAddressList.length,
@@ -70,7 +68,7 @@ export default ({
         method: 'POST',
         api: 'api/campaign/createCampaign',
         params: {
-          ...data,
+          ...defaultCampaignData,
           contractAddress: campaignAddress,
           projectAddress: signerAddress,
         },
@@ -134,6 +132,9 @@ export default ({
         <Descriptions.Item label="AD3Token Approve 额度">
           {budget}
         </Descriptions.Item>
+        <Descriptions.Item label="单个用户激励金额">
+          {userFee}
+        </Descriptions.Item>
       </Descriptions>
       <Descriptions title="CreateCampaign 参数信息" bordered column={1}>
         <Descriptions.Item label="预算">{budget}</Descriptions.Item>
@@ -147,17 +148,17 @@ export default ({
               },
               {
                 title: '内容制作费',
-                dataIndex: 'contentFee',
-                key: 'contentFee',
+                dataIndex: 'fixedFee',
+                key: 'fixedFee',
               },
               {
                 title: '抽成比例',
-                dataIndex: 'conversionRate',
-                key: 'conversionRate',
+                dataIndex: 'ratio',
+                key: 'ratio',
               },
             ]}
             rowKey="kolAddress"
-            dataSource={data.kolRelationDTOS}
+            dataSource={kols}
             pagination={false}
           />
         </Descriptions.Item>

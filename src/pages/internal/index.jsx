@@ -15,20 +15,20 @@ const defaultCampaignData = {
   contractAddress: '',
   projectAddress: '',
   campaignName:
-    'Magipop DAO NFT launch！！！Finish task and get the access to mint NFT',
+    'Magipop DAO NFT launch！！！Finish task and get the access to mint NFT 1111',
   startDate: '2022-12-08 23:00:00',
   endDate: '2022-12-12 23:59:59',
   kolScope: 'PUBLIC',
   kolRelationDTOS: [
     {
       kolAddress: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
-      contentFee: 250,
-      conversionRate: 0,
+      contentFee: 300,
+      conversionRate: 100,
     },
     {
       kolAddress: '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC',
-      contentFee: 130,
-      conversionRate: 0,
+      contentFee: 180,
+      conversionRate: 100,
     },
   ],
   contentFee: 0,
@@ -137,7 +137,7 @@ export default () => {
               ad3HubAddress={ad3HubAddress}
               ad3TokenAddress={ad3TokenAddress}
               contract={ad3HubContract}
-              data={campaginData}
+              defaultCampaignData={defaultCampaignData}
               budget={budget}
               kols={kols}
               token={ad3Token}

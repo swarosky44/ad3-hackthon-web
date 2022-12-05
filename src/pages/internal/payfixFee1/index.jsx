@@ -8,16 +8,18 @@ export default ({ contract, signer, data, kols }) => {
   const { contractAddress } = data;
   const [checkButton, setCheckButton] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-
+  console.info('contractAddress', contractAddress);
   const payFixFee1 = async () => {
     try {
       const signerAddress = await signer.getAddress();
       const campaignAddressList = await contract.getCampaignAddressList(
         signerAddress,
       );
+      console.info('campaignAddressList', campaignAddressList);
       const campaignIndex = campaignAddressList.findIndex(
         (l) => l === contractAddress,
       );
+      console.info('campaignIndex', campaignIndex);
       console.log('selectedRowKeys:', selectedRowKeys);
       await contract.payfixFee(
         selectedRowKeys,

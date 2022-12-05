@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import { isMobile } from 'react-device-detect';
-import PcContent from './pc';
+import { Spin } from 'antd';
 import MobileContent from './mobile';
 import LoginModal from './loginModal';
 import { request } from '../../utils/request';
@@ -16,6 +15,7 @@ const { campaignId = '', kolId = '' } = location.search
     return res;
   }, {});
 export default () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [campaign, setCampaign] = useState(null);
   const [reward, setReward] = useState(null);
   const [taskList, setTaskList] = useState([]);
@@ -97,6 +97,7 @@ export default () => {
     });
     if (ret && `${ret.result}` === 'true') {
       getTaskDetail();
+      window.open(task.task.actionObject);
     }
   };
 
@@ -113,27 +114,32 @@ export default () => {
   if (campaign && campaignInstance && taskList.length) {
     return (
       <div>
-        {isMobile ? (
-          <MobileContent
-            reward={reward}
-            campaign={campaign}
-            campaignInstance={campaignInstance}
-            taskList={taskList}
-            formatTime={formatTime}
-            onFinishedTask={onFinishedTask}
-          />
-        ) : (
-          <PcContent
-            reward={reward}
-            campaign={campaign}
-            taskList={taskList}
-            formatTime={formatTime}
-            onFinishedTask={onFinishedTask}
-          />
-        )}
+        <MobileContent
+          reward={reward}
+          campaign={campaign}
+          campaignInstance={campaignInstance}
+          taskList={taskList}
+          formatTime={formatTime}
+          onFinishedTask={onFinishedTask}
+        />
         {loginModalVisible ? (
           <LoginModal close={() => setLoginModalVisible(false)} />
         ) : null}
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: '120px',
+        }}
+      >
+        <Spin size="large" />
       </div>
     );
   }
