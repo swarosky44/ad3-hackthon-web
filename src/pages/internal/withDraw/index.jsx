@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import CampaignAbi from '../Campaign.json';
 import styles from '../index.less';
 
-export default ({ contract = {}, signer = {} }) => {
+export default ({ contract = {}, signer = {}, data = {} }) => {
   const { contractAddress } = data;
   const [checkButton, setCheckButton] = useState(false);
   console.info(contractAddress);
@@ -18,7 +18,11 @@ export default ({ contract = {}, signer = {} }) => {
       (l) => l === contractAddress,
     );
     await contract.withdraw(signerAddress, campaignIndex + 1);
-    setCheckButton(true);
+
+    contract.once('Withdraw', (from, to, value) => {
+      console.info(from, to, value);
+      setCheckButton(true);
+    });
   };
 
   const checkBalance = async () => {

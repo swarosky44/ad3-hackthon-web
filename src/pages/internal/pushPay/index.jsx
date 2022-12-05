@@ -35,7 +35,11 @@ export default ({ contract = {}, signer = {}, data }) => {
         gasPrice: 10 * 10 ** 9,
       },
     );
-    setCheckButton(true);
+
+    contract.once('Pushpay', (from, to, value) => {
+      console.info(from, to, value);
+      setCheckButton(true);
+    });
   };
 
   const checkBalance = async () => {

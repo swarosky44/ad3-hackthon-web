@@ -4,19 +4,53 @@ import { ethers } from 'ethers';
 import { request } from '../../../utils/request';
 import CampaignAbi from '../Campaign.json';
 import styles from '../index.less';
+import { useEffect } from 'react';
 
 export default ({
   ad3HubAddress = '',
   ad3TokenAddress = '',
   contract = {},
   defaultCampaignData = {},
-  kols = [],
-  budget = 0,
   token = {},
   signer = {},
   setCampaignData = () => {},
 }) => {
-  const userFee = 10;
+  const userFee = 200;
+
+  // 计算总预算
+  const budget = useMemo(() => {
+    let result = 0;
+    if (defaultCampaignData) {
+      if (
+        defaultCampaignData.rewardDTOS &&
+        defaultCampaignData.rewardDTOS.length
+      ) {
+        result += defaultCampaignData.rewardDTOS[0].quota;
+      }
+      if (
+        defaultCampaignData.kolRelationDTOS &&
+        defaultCampaignData.kolRelationDTOS.length
+      ) {
+        result = defaultCampaignData.kolRelationDTOS.reduce((cur, pre) => {
+          return cur + pre.contentFee;
+        }, result);
+      }
+    }
+    return result;
+  }, [defaultCampaignData]);
+
+  const kols = useMemo(() => {
+    if (defaultCampaignData && defaultCampaignData.kolRelationDTOS) {
+      return defaultCampaignData.kolRelationDTOS.map((k) => ({
+        kolAddress: k.kolAddress,
+        fixedFee: k.contentFee,
+        ratio: k.conversionRate,
+        paymentStage: 0,
+      }));
+    }
+    return [];
+  }, [defaultCampaignData]);
+
   // 创建合约
   const createCampaign = async () => {
     try {
@@ -28,13 +62,13 @@ export default ({
         ad3HubAddress,
         ethers.utils.parseUnits(budget.toString(), 6),
       );
-      kols = kols.map((s) => ({
+      const fkols = kols.map((s) => ({
         ...s,
         fixedFee: ethers.utils.parseUnits(s.fixedFee.toString(), 6),
       }));
       console.log('kols:', kols);
       await contract.createCampaign(
-        kols,
+        fkols,
         ethers.utils.parseUnits(budget.toString(), 6),
         ethers.utils.parseUnits(userFee.toString(), 6),
         {
@@ -42,72 +76,76 @@ export default ({
           gasPrice: 10 * 10 ** 9,
         },
       );
-      console.info(2);
-      //Check campaign's address
-      const signerAddress = await signer.getAddress();
-      const campaignAddressList = await contract.getCampaignAddressList(
-        signerAddress,
-      );
-      console.info('campaignAddressList', campaignAddressList);
-      const campaignAddress = await contract.getCampaignAddress(
-        signerAddress,
-        campaignAddressList.length,
-      );
-      console.log('campaignAddress:' + campaignAddress);
+      // 监听回调
+      contract.once('CreateCampaign', async (from, to, value) => {
+        console.info(from, to, value);
+        //Check campaign's address
+        const signerAddress = await signer.getAddress();
+        const campaignAddressList = await contract.getCampaignAddressList(
+          signerAddress,
+        );
+        console.info('campaignAddressList', campaignAddressList);
+        const campaignAddress = await contract.getCampaignAddress(
+          signerAddress,
+          campaignAddressList.length,
+        );
+        console.log('campaignAddress:' + campaignAddress);
 
-      // Check campaign's balance
-      const Campaign = new ethers.Contract(
-        campaignAddress,
-        CampaignAbi,
-        signer,
-      );
-      const balance = await Campaign.remainBalance();
-      console.log('balance1:' + balance);
+        // Check campaign's balance
+        const Campaign = new ethers.Contract(
+          campaignAddress,
+          CampaignAbi,
+          signer,
+        );
+        const balance = await Campaign.remainBalance();
+        console.log('balance1:' + balance);
 
-      const result = await request({
-        method: 'POST',
-        api: 'api/campaign/createCampaign',
-        params: {
-          ...defaultCampaignData,
-          contractAddress: campaignAddress,
-          projectAddress: signerAddress,
-        },
-      });
-
-      if (result && `${result.code}` === '200') {
-        setCampaignData({
-          ...data,
-          contractAddress: campaignAddress,
-          projectAddress: signerAddress,
-        });
-        localStorage.setItem(
-          'campaignData',
-          JSON.stringify({
-            ...data,
+        const result = await request({
+          method: 'POST',
+          api: 'api/campaign/createCampaign',
+          params: {
+            ...defaultCampaignData,
             contractAddress: campaignAddress,
             projectAddress: signerAddress,
-          }),
-        );
-        Modal.success({
-          title: '创建订单合约成功',
-          content: (
-            <Descriptions title="合约信息" column={1} bordered>
-              <Descriptions.Item label="合约地址">
-                {campaignAddress}
-              </Descriptions.Item>
-              <Descriptions.Item label="合约资金">
-                {ethers.utils.formatUnits(balance.toNumber(), 6)}
-              </Descriptions.Item>
-            </Descriptions>
-          ),
+          },
         });
-      } else {
-        Modal.warn({
-          title: '创建订单合约失败',
-          content: null,
-        });
-      }
+
+        if (result && `${result.code}` === '200') {
+          setCampaignData({
+            ...defaultCampaignData,
+            contractAddress: campaignAddress,
+            projectAddress: signerAddress,
+          });
+          localStorage.setItem(
+            'campaignData',
+            JSON.stringify({
+              ...defaultCampaignData,
+              contractAddress: campaignAddress,
+              projectAddress: signerAddress,
+            }),
+          );
+          Modal.success({
+            title: '创建订单合约成功',
+            content: (
+              <Descriptions title="合约信息" column={1} bordered>
+                <Descriptions.Item label="合约地址">
+                  {campaignAddress}
+                </Descriptions.Item>
+                <Descriptions.Item label="合约资金">
+                  {ethers.utils.formatUnits(balance.toNumber(), 6)}
+                </Descriptions.Item>
+              </Descriptions>
+            ),
+          });
+        } else {
+          Modal.warn({
+            title: '创建订单合约失败',
+            content: null,
+          });
+        }
+      });
     } catch (error) {
+      console.warn(error);
       Modal.warn({
         title: '创建订单合约失败',
         content: JSON.stringify(error),

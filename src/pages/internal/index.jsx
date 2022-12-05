@@ -22,12 +22,12 @@ const defaultCampaignData = {
   kolRelationDTOS: [
     {
       kolAddress: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
-      contentFee: 300,
+      contentFee: 390,
       conversionRate: 100,
     },
     {
       kolAddress: '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC',
-      contentFee: 180,
+      contentFee: 170,
       conversionRate: 100,
     },
   ],
@@ -85,22 +85,6 @@ export default () => {
     signer: model.signer,
   }));
 
-  // 计算总预算
-  const budget = useMemo(() => {
-    let result = 0;
-    if (campaginData) {
-      if (campaginData.rewardDTOS && campaginData.rewardDTOS.length) {
-        result += campaginData.rewardDTOS[0].quota;
-      }
-      if (campaginData.kolRelationDTOS && campaginData.kolRelationDTOS.length) {
-        result = campaginData.kolRelationDTOS.reduce((cur, pre) => {
-          return cur + pre.contentFee;
-        }, result);
-      }
-    }
-    return result;
-  }, [campaginData]);
-
   const kols = useMemo(() => {
     if (campaginData && campaginData.kolRelationDTOS) {
       return campaginData.kolRelationDTOS.map((k) => ({
@@ -138,8 +122,6 @@ export default () => {
               ad3TokenAddress={ad3TokenAddress}
               contract={ad3HubContract}
               defaultCampaignData={defaultCampaignData}
-              budget={budget}
-              kols={kols}
               token={ad3Token}
               signer={signer}
               setCampaignData={setCampaignData}

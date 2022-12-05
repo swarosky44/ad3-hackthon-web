@@ -27,7 +27,11 @@ export default ({ contract, signer, data, kols }) => {
           gasPrice: 10 * 10 ** 9,
         },
       );
-      setCheckButton(true);
+
+      contract.once('PayFixFee', (from, to, value) => {
+        console.info(from, to, value);
+        setCheckButton(true);
+      });
     } catch (error) {
       Modal.warn({
         title: '支付定金失败',
