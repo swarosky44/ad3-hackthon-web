@@ -51,12 +51,12 @@ const defaultCampaignData = {
   kolRelationDTOS: [
     {
       kolAddress: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
-      contentFee: 390,
+      contentFee: 430,
       conversionRate: 100,
     },
     {
       kolAddress: '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC',
-      contentFee: 170,
+      contentFee: 110,
       conversionRate: 100,
     },
   ],
