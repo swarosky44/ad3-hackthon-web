@@ -4,7 +4,6 @@ import { ethers } from 'ethers';
 import { request } from '../../../utils/request';
 import CampaignAbi from '../Campaign.json';
 import styles from '../index.less';
-import { useEffect } from 'react';
 
 export default ({
   ad3HubAddress = '',
@@ -62,87 +61,86 @@ export default ({
         ad3HubAddress,
         ethers.utils.parseUnits(budget.toString(), 6),
       );
-      const fkols = kols.map((s) => ({
-        ...s,
-        fixedFee: ethers.utils.parseUnits(s.fixedFee.toString(), 6),
-      }));
-      console.log('kols:', kols);
-      await contract.createCampaign(
-        fkols,
-        ethers.utils.parseUnits(budget.toString(), 6),
-        ethers.utils.parseUnits(userFee.toString(), 6),
-        {
-          gasLimit: 15000000,
-          gasPrice: 10 * 10 ** 9,
-        },
-      );
-      // 监听回调
-      contract.once('CreateCampaign', async (from, to, value) => {
-        console.info(from, to, value);
-        //Check campaign's address
-        const signerAddress = await signer.getAddress();
-        const campaignAddressList = await contract.getCampaignAddressList(
-          signerAddress,
+      token.once('Approval', async (from, to, value) => {
+        console.info('Approval', from, to, value);
+        const fkols = kols.map((s) => ({
+          ...s,
+          fixedFee: ethers.utils.parseUnits(s.fixedFee.toString(), 6),
+        }));
+        console.log('kols:', kols);
+        await contract.createCampaign(
+          fkols,
+          ethers.utils.parseUnits(budget.toString(), 6),
+          ethers.utils.parseUnits(userFee.toString(), 6),
         );
-        console.info('campaignAddressList', campaignAddressList);
-        const campaignAddress = await contract.getCampaignAddress(
-          signerAddress,
-          campaignAddressList.length,
-        );
-        console.log('campaignAddress:' + campaignAddress);
+        // 监听回调
+        contract.once('CreateCampaign', async (from, to, value) => {
+          console.info(from, to, value);
+          //Check campaign's address
+          const signerAddress = await signer.getAddress();
+          const campaignAddressList = await contract.getCampaignAddressList(
+            signerAddress,
+          );
+          console.info('campaignAddressList', campaignAddressList);
+          const campaignAddress = await contract.getCampaignAddress(
+            signerAddress,
+            campaignAddressList.length,
+          );
+          console.log('campaignAddress:' + campaignAddress);
 
-        // Check campaign's balance
-        const Campaign = new ethers.Contract(
-          campaignAddress,
-          CampaignAbi,
-          signer,
-        );
-        const balance = await Campaign.remainBalance();
-        console.log('balance1:' + balance);
+          // Check campaign's balance
+          const Campaign = new ethers.Contract(
+            campaignAddress,
+            CampaignAbi,
+            signer,
+          );
+          const balance = await Campaign.remainBalance();
+          console.log('balance1:' + balance);
 
-        const result = await request({
-          method: 'POST',
-          api: 'api/campaign/createCampaign',
-          params: {
-            ...defaultCampaignData,
-            contractAddress: campaignAddress,
-            projectAddress: signerAddress,
-          },
-        });
-
-        if (result && `${result.code}` === '200') {
-          setCampaignData({
-            ...defaultCampaignData,
-            contractAddress: campaignAddress,
-            projectAddress: signerAddress,
-          });
-          localStorage.setItem(
-            'campaignData',
-            JSON.stringify({
+          const result = await request({
+            method: 'POST',
+            api: 'api/campaign/createCampaign',
+            params: {
               ...defaultCampaignData,
               contractAddress: campaignAddress,
               projectAddress: signerAddress,
-            }),
-          );
-          Modal.success({
-            title: '创建订单合约成功',
-            content: (
-              <Descriptions title="合约信息" column={1} bordered>
-                <Descriptions.Item label="合约地址">
-                  {campaignAddress}
-                </Descriptions.Item>
-                <Descriptions.Item label="合约资金">
-                  {ethers.utils.formatUnits(balance.toNumber(), 6)}
-                </Descriptions.Item>
-              </Descriptions>
-            ),
+            },
           });
-        } else {
-          Modal.warn({
-            title: '创建订单合约失败',
-            content: null,
-          });
-        }
+
+          if (result && `${result.code}` === '200') {
+            setCampaignData({
+              ...defaultCampaignData,
+              contractAddress: campaignAddress,
+              projectAddress: signerAddress,
+            });
+            localStorage.setItem(
+              'campaignData',
+              JSON.stringify({
+                ...defaultCampaignData,
+                contractAddress: campaignAddress,
+                projectAddress: signerAddress,
+              }),
+            );
+            Modal.success({
+              title: '创建订单合约成功',
+              content: (
+                <Descriptions title="合约信息" column={1} bordered>
+                  <Descriptions.Item label="合约地址">
+                    {campaignAddress}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="合约资金">
+                    {ethers.utils.formatUnits(balance.toNumber(), 6)}
+                  </Descriptions.Item>
+                </Descriptions>
+              ),
+            });
+          } else {
+            Modal.warn({
+              title: '创建订单合约失败',
+              content: null,
+            });
+          }
+        });
       });
     } catch (error) {
       console.warn(error);

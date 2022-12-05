@@ -131,6 +131,7 @@ export default () => {
         ad3TokenAddress,
         [
           'function approve(address spender, uint256 amount) external returns (bool)',
+          'event Approval(address indexed owner, address indexed spender, uint256 value)',
         ],
         signer,
       );

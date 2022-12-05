@@ -22,10 +22,6 @@ export default ({ contract, signer, data, kols }) => {
         selectedRowKeys,
         signerAddress,
         campaignIndex + 1,
-        {
-          gasLimit: 15000000,
-          gasPrice: 10 * 10 ** 9,
-        },
       );
 
       contract.once('PayFixFee', (from, to, value) => {

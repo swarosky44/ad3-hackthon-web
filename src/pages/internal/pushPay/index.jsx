@@ -26,15 +26,7 @@ export default ({ contract = {}, signer = {}, data }) => {
     const campaignIndex = campaignAddressList.findIndex(
       (l) => l === contractAddress,
     );
-    await contract.pushPayKol(
-      signerAddress,
-      campaignIndex + 1,
-      campaignResult,
-      {
-        gasLimit: 15000000,
-        gasPrice: 10 * 10 ** 9,
-      },
-    );
+    await contract.pushPayKol(signerAddress, campaignIndex + 1, campaignResult);
 
     contract.once('Pushpay', (from, to, value) => {
       console.info(from, to, value);
