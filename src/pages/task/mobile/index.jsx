@@ -14,7 +14,6 @@ export default ({
     new Date(campaign.endTime.replace(/-/gi, '/')).getTime() - Date.now(),
   );
 
-  console.info(countdown);
   useEffect(() => {
     interval = setInterval(() => {
       setCountdown((v) => {
