@@ -1,5 +1,5 @@
 import { isMobile } from 'react-device-detect';
-import WalletButton from '@/components/walletButton';
+import WalletButton from '../walletButton';
 import styles from './index.less';
 
 export default () => {

@@ -135,11 +135,7 @@ export default () => {
     }
   }, [account]);
 
-  useEffect(() => {
-    if (hadInstallMetaMask) {
-      connectWallet();
-    }
-  }, []);
+  useEffect(() => {}, []);
 
   return {
     signer,
