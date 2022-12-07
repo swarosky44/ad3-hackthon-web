@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Table, Modal, Descriptions } from 'antd';
 import { ethers } from 'ethers';
+import { useModel } from 'umi';
 import CampaignAbi from '../Campaign.json';
 import styles from '../index.less';
 
@@ -8,6 +9,9 @@ export default ({ contract, signer, data, kols }) => {
   const { contractAddress } = data;
   const [checkButton, setCheckButton] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const { getCurrentGasPrice } = useModel('global', (model) => ({
+    getCurrentGasPrice: model.getCurrentGasPrice,
+  }));
 
   const payFixFee1 = async () => {
     try {
@@ -18,10 +22,15 @@ export default ({ contract, signer, data, kols }) => {
       const campaignIndex = campaignAddressList.findIndex(
         (l) => l === contractAddress,
       );
+      const feeData = await getCurrentGasPrice();
       await contract.payfixFee(
         selectedRowKeys,
         signerAddress,
         campaignIndex + 1,
+        {
+          maxFeePerGas: feeData.maxFeePerGas,
+          maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+        },
       );
 
       contract.once('PayFixFee', (from, to, value) => {

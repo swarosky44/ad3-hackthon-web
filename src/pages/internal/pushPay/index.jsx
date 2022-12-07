@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Table, Modal, Descriptions } from 'antd';
 import { ethers } from 'ethers';
+import { useModel } from 'umi';
 import { request } from '../../../utils/request';
 import CampaignAbi from '../Campaign.json';
 import styles from '../index.less';
@@ -17,6 +18,9 @@ export default ({ contract = {}, signer = {}, data }) => {
   const { contractAddress } = data;
   const [checkButton, setCheckButton] = useState(false);
   const [campaignResult, setCampaignResult] = useState([]);
+  const { getCurrentGasPrice } = useModel('global', (model) => ({
+    getCurrentGasPrice: model.getCurrentGasPrice,
+  }));
 
   const pushPay = async () => {
     const signerAddress = await signer.getAddress();
@@ -26,7 +30,16 @@ export default ({ contract = {}, signer = {}, data }) => {
     const campaignIndex = campaignAddressList.findIndex(
       (l) => l === contractAddress,
     );
-    await contract.pushPayKol(signerAddress, campaignIndex + 1, campaignResult);
+    const feeData = await getCurrentGasPrice();
+    await contract.pushPayKol(
+      signerAddress,
+      campaignIndex + 1,
+      campaignResult,
+      {
+        maxFeePerGas: feeData.maxFeePerGas,
+        maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+      },
+    );
 
     contract.once('Pushpay', (from, to, value) => {
       console.info(from, to, value);

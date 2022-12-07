@@ -6,6 +6,7 @@ export default defineConfig({
   nodeModulesTransform: {
     type: 'none',
   },
+  hash: true,
   headScripts: [
     {
       src: 'https://www.googletagmanager.com/gtag/js?id=G-06VG3J3659',

@@ -43,20 +43,14 @@ if (env === 'daily') {
 const defaultCampaignData = {
   contractAddress: '',
   projectAddress: '',
-  campaignName:
-    'Magipop DAO NFT launch！！！Finish task and get the access to mint NFT 1111',
+  campaignName: 'Magipop DAO NFT launch！！！',
   startDate: '2022-12-08 23:00:00',
   endDate: '2022-12-12 23:59:59',
   kolScope: 'PUBLIC',
   kolRelationDTOS: [
     {
-      kolAddress: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+      kolAddress: '0x1226b8FdBBCE92602E29FF7eb7bFaf98096685A9',
       contentFee: 430,
-      conversionRate: 100,
-    },
-    {
-      kolAddress: '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC',
-      contentFee: 110,
       conversionRate: 100,
     },
   ],
@@ -67,14 +61,14 @@ const defaultCampaignData = {
     {
       desc: 'USDT',
       type: 'TOKEN',
-      winnersNum: 200,
-      quota: 100000,
+      winnersNum: 3,
+      quota: 30000,
       unit: 'USDT',
     },
   ],
   taskDTOS: [
     {
-      name: 'FOLLOW BUBBLE',
+      name: 'Follow @BubbleObservers',
       desc: 'follow bubble',
       type: 'SOCIAL_MEDIA',
       subType: 'FOLLOW',
@@ -82,7 +76,7 @@ const defaultCampaignData = {
       actionObject: 'https://twitter.com/intent/follow?screen_name=deritrade',
     },
     {
-      name: 'FORWARD TWITTER',
+      name: 'Retweet',
       desc: 'forward twitter',
       type: 'SOCIAL_MEDIA',
       subType: 'FORWARD',
@@ -91,7 +85,7 @@ const defaultCampaignData = {
         'https://twitter.com/intent/retweet?tweet_id=1580528778840768513',
     },
     {
-      name: 'Mint NFT',
+      name: 'Click to Vote',
       desc: 'click link and mint NFT',
       type: 'SOCIAL_MEDIA',
       subType: 'LIKE',

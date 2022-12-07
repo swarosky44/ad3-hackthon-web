@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { Modal, Descriptions } from 'antd';
 import { ethers } from 'ethers';
+import { useModel } from 'umi';
 import CampaignAbi from '../Campaign.json';
 import styles from '../index.less';
 
 export default ({ contract = {}, signer = {}, data = {} }) => {
   const { contractAddress } = data;
   const [checkButton, setCheckButton] = useState(false);
-  console.info(contractAddress);
+  const { getCurrentGasPrice } = useModel('global', (model) => ({
+    getCurrentGasPrice: model.getCurrentGasPrice,
+  }));
 
   const withDraw = async () => {
     const signerAddress = await signer.getAddress();
@@ -17,7 +20,11 @@ export default ({ contract = {}, signer = {}, data = {} }) => {
     const campaignIndex = campaignAddressList.findIndex(
       (l) => l === contractAddress,
     );
-    await contract.withdraw(signerAddress, campaignIndex + 1);
+    const feeData = await getCurrentGasPrice();
+    await contract.withdraw(signerAddress, campaignIndex + 1, {
+      maxFeePerGas: feeData.maxFeePerGas,
+      maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+    });
 
     contract.once('Withdraw', (from, to, value) => {
       console.info(from, to, value);

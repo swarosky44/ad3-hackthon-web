@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Descriptions, Table, Modal } from 'antd';
 import { ethers } from 'ethers';
+import { useModel } from 'umi';
 import { request } from '../../../utils/request';
 import CampaignAbi from '../Campaign.json';
 import styles from '../index.less';
@@ -8,13 +9,16 @@ import styles from '../index.less';
 export default ({
   ad3HubAddress = '',
   ad3TokenAddress = '',
-  contract = {},
   defaultCampaignData = {},
-  token = {},
+  contract = {},
   signer = {},
+  token = {},
   setCampaignData = () => {},
 }) => {
-  const userFee = 200;
+  const { getCurrentGasPrice } = useModel('global', (model) => ({
+    getCurrentGasPrice: model.getCurrentGasPrice,
+  }));
+  const userFee = 3;
 
   // 计算总预算
   const budget = useMemo(() => {
@@ -57,25 +61,32 @@ export default ({
       console.log(
         'budgetValue:' + ethers.utils.parseUnits(budget.toString(), 6),
       );
+      const feeData = await getCurrentGasPrice();
       await token.approve(
         ad3HubAddress,
         ethers.utils.parseUnits(budget.toString(), 6),
+        {
+          maxFeePerGas: feeData.maxFeePerGas,
+          maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+        },
       );
       token.once('Approval', async (from, to, value) => {
-        console.info('Approval', from, to, value);
         const fkols = kols.map((s) => ({
           ...s,
           fixedFee: ethers.utils.parseUnits(s.fixedFee.toString(), 6),
         }));
-        console.log('kols:', kols);
+        const feeData = await getCurrentGasPrice();
         await contract.createCampaign(
           fkols,
           ethers.utils.parseUnits(budget.toString(), 6),
           ethers.utils.parseUnits(userFee.toString(), 6),
+          {
+            maxFeePerGas: feeData.maxFeePerGas,
+            maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+          },
         );
         // 监听回调
         contract.once('CreateCampaign', async (from, to, value) => {
-          console.info(from, to, value);
           //Check campaign's address
           const signerAddress = await signer.getAddress();
           const campaignAddressList = await contract.getCampaignAddressList(
