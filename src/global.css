@@ -8,7 +8,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(/static/Bungge-Regular.woff2) format("woff2");
+  src: url(https://d2mn26qoefb5xq.cloudfront.net/Poppins-Bold.woff2) format("woff2");
 }
 
 @font-face {
@@ -32,5 +32,5 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(/static/fonts/Inter-Bold.woff2) format("woff2");
+  src: url(/static/Inter-Bold.woff2) format("woff2");
 }

@@ -11,9 +11,10 @@ export default ({
   onFinishedTask = () => {},
 }) => {
   const [countdown, setCountdown] = useState(
-    new Date(campaign.endTime.replace('-', '/')).getTime() - Date.now(),
+    new Date(campaign.endTime.replace(/-/gi, '/')).getTime() - Date.now(),
   );
 
+  console.info(countdown);
   useEffect(() => {
     interval = setInterval(() => {
       setCountdown((v) => {
