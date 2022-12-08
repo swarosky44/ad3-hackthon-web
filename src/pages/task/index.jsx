@@ -97,7 +97,7 @@ export default () => {
     });
     if (ret && `${ret.result}` === 'true') {
       getTaskDetail();
-      window.open(task.task.actionObject);
+      location.assign(task.task.actionObject);
     }
   };
 
