@@ -77,9 +77,10 @@ export default () => {
     try {
       const { data } = await axios({
         method: 'get',
-        url: isProd
-          ? 'https://gasstation-mainnet.matic.network/v2'
-          : 'https://gasstation-mumbai.matic.today/v2',
+        url:
+          location.search.indexOf('env=test') < 0
+            ? 'https://gasstation-mainnet.matic.network/v2'
+            : 'https://gasstation-mumbai.matic.today/v2',
       });
       maxFeePerGas = ethers.utils.parseUnits(
         Math.ceil(data.fast.maxFee) + '',

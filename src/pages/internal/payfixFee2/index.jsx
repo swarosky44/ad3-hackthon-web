@@ -2,18 +2,23 @@ import { useEffect, useState } from 'react';
 import { Table, Modal, Descriptions } from 'antd';
 import { ethers } from 'ethers';
 import { useModel } from 'umi';
+import { LoadingOutlined } from '@ant-design/icons';
 import CampaignAbi from '../Campaign.json';
 import styles from '../index.less';
 
 export default ({ contract, signer, data, kols }) => {
   const { contractAddress } = data;
   const [checkButton, setCheckButton] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const { getCurrentGasPrice } = useModel('global', (model) => ({
     getCurrentGasPrice: model.getCurrentGasPrice,
   }));
 
   const payFixFee1 = async () => {
+    if (loading) return;
+    setLoading(true);
+
     try {
       const signerAddress = await signer.getAddress();
       const campaignAddressList = await contract.getCampaignAddressList(
@@ -36,8 +41,10 @@ export default ({ contract, signer, data, kols }) => {
       contract.once('PayFixFee', (from, to, value) => {
         console.info(from, to, value);
         setCheckButton(true);
+        setLoading(false);
       });
     } catch (error) {
+      setLoading(false);
       Modal.warn({
         title: '支付定金失败',
         content: JSON.stringify(error),
@@ -84,7 +91,11 @@ export default ({ contract, signer, data, kols }) => {
           },
         }}
       />
-      {checkButton ? (
+      {loading ? (
+        <div className={styles.button}>
+          <LoadingOutlined style={{ marginRight: '8px' }} /> 耐心等待，链上很慢
+        </div>
+      ) : checkButton ? (
         <div className={styles.button} onClick={checkBalance}>
           查询合约余额
         </div>

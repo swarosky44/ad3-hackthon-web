@@ -1,11 +1,13 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Descriptions, Table, Modal } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 import { ethers } from 'ethers';
 import { useModel } from 'umi';
 import { request } from '../../../utils/request';
 import CampaignAbi from '../Campaign.json';
 import styles from '../index.less';
 
+const userFee = 3;
 export default ({
   ad3HubAddress = '',
   ad3TokenAddress = '',
@@ -18,7 +20,7 @@ export default ({
   const { getCurrentGasPrice } = useModel('global', (model) => ({
     getCurrentGasPrice: model.getCurrentGasPrice,
   }));
-  const userFee = 3;
+  const [loading, setLoading] = useState(false);
 
   // 计算总预算
   const budget = useMemo(() => {
@@ -56,6 +58,9 @@ export default ({
 
   // 创建合约
   const createCampaign = async () => {
+    if (loading) return;
+    setLoading(true);
+
     try {
       console.log('budget:' + budget);
       console.log(
@@ -145,7 +150,9 @@ export default ({
                 </Descriptions>
               ),
             });
+            setLoading(false);
           } else {
+            setLoading(false);
             Modal.warn({
               title: '创建订单合约失败',
               content: null,
@@ -155,6 +162,7 @@ export default ({
       });
     } catch (error) {
       console.warn(error);
+      setLoading(false);
       Modal.warn({
         title: '创建订单合约失败',
         content: JSON.stringify(error),
@@ -210,9 +218,15 @@ export default ({
           />
         </Descriptions.Item>
       </Descriptions>
-      <div className={styles.button} onClick={createCampaign}>
-        创建合约
-      </div>
+      {loading ? (
+        <div className={styles.button}>
+          <LoadingOutlined style={{ marginRight: '8px' }} /> 耐心等待，链上很慢
+        </div>
+      ) : (
+        <div className={styles.button} onClick={createCampaign}>
+          创建合约
+        </div>
+      )}
     </div>
   );
 };
