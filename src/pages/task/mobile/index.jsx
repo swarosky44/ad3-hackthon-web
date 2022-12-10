@@ -81,7 +81,12 @@ export default ({
         />
       );
     }
-    return null;
+    return (
+      <img
+        className={styles.taskIcon}
+        src={require('@/static/online-voting.png')}
+      />
+    );
   };
 
   // 渲染列表
@@ -89,7 +94,7 @@ export default ({
     return taskList.map((l, i) => {
       if (l.taskInstance.status === 'finish') {
         return (
-          <div className={styles.taskLine}>
+          <div className={styles.taskLine} key={i}>
             <div className={styles.taskContent}>
               {renderTaskIcon(l)}
               <div className={styles.taskTitle}>{l.task.name}</div>
@@ -126,19 +131,23 @@ export default ({
           {campaign.startTime} ~ {campaign.endTime}
         </div>
       </div>
+      <div className={styles.cover}>
+        <img
+          className={styles.coverImage}
+          src={require('@/static/magicpop-cover.png')}
+        />
+      </div>
       {renderCountdown()}
       <div className={styles.list}>{renderList()}</div>
       <div className={styles.description}>
         <h1 className={styles.descTitle}>Description</h1>
-        <h3 className={styles.descQ}>What is the Benefit of NFT ?</h3>
+        <h3 className={styles.descQ}>What is Bubble Observers - Observers?</h3>
         <p className={styles.descA}>
-          creators wonderland. A révolution movement to kick Hollywood's ass
-          off. We co-create, own, and monetize IPs in a web3 way.{' '}
+          Bubble Observersis the 1st story series co-created by magipop DAO
+          members. Bubble
+          Observers-ObserversisitscounterpartNFTseries,corresponding to the
+          characters and various elements within the story.
         </p>
-        <h3 className={styles.descQ}>What is the Benefit of NFT ?</h3>
-        <ul>
-          <li className={styles.descA}>NFT Holder Benefits</li>
-        </ul>
       </div>
       <div className={styles.reward}>
         <h1 className={styles.rewardTitle}>Reward</h1>

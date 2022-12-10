@@ -33,7 +33,7 @@ if (env === 'daily') {
 } else if (env === 'main') {
   // 主网环境
   ad3HubAddress = '0xc1A83b13e858909ac089180D34304259EC3F71Eb';
-  ad3TokenAddress = '0x895d46f3a32f4Eb85dcC275C754aB127194F2559';
+  ad3TokenAddress = '0xc2132D05D31c914a87C6611C10748AEb04B58e8F';
 } else {
   // 默认本地环境
   ad3HubAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
@@ -43,8 +43,8 @@ if (env === 'daily') {
 const defaultCampaignData = {
   contractAddress: '',
   projectAddress: '',
-  campaignName: 'Magipop DAO NFT launch！！！',
-  startDate: '2022-12-08 23:00:00',
+  campaignName: 'Vote for Bubble Observers！',
+  startDate: '2022-12-08 00:00:00',
   endDate: '2022-12-12 23:59:59',
   kolScope: 'PUBLIC',
   kolRelationDTOS: [
@@ -73,7 +73,7 @@ const defaultCampaignData = {
       type: 'SOCIAL_MEDIA',
       subType: 'FOLLOW',
       channel: 'TWITTER',
-      actionObject: 'https://twitter.com/intent/follow?screen_name=deritrade',
+      actionObject: 'https://twitter.com/BubbleObservers',
     },
     {
       name: 'Retweet',
@@ -82,7 +82,7 @@ const defaultCampaignData = {
       subType: 'FORWARD',
       channel: 'TWITTER',
       actionObject:
-        'https://twitter.com/intent/retweet?tweet_id=1580528778840768513',
+        'https://twitter.com/BubbleObservers/status/1600488947138056192',
     },
     {
       name: 'Click to Vote',
@@ -90,7 +90,7 @@ const defaultCampaignData = {
       type: 'SOCIAL_MEDIA',
       subType: 'LIKE',
       channel: '',
-      actionObject: 'https://portal.quest3.xyz/',
+      actionObject: 'https://mooar.com/vote',
     },
   ],
 };
