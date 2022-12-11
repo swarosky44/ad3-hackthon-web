@@ -7,7 +7,7 @@ import { request } from '../../../utils/request';
 import CampaignAbi from '../Campaign.json';
 import styles from '../index.less';
 
-const userFee = 3;
+const userFee = 2;
 export default ({
   ad3HubAddress = '',
   ad3TokenAddress = '',

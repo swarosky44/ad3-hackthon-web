@@ -32,8 +32,8 @@ if (env === 'daily') {
   ad3TokenAddress = '0x895d46f3a32f4Eb85dcC275C754aB127194F2559';
 } else if (env === 'main') {
   // 主网环境
-  ad3HubAddress = '0xc1A83b13e858909ac089180D34304259EC3F71Eb';
-  ad3TokenAddress = '0xc2132D05D31c914a87C6611C10748AEb04B58e8F';
+  ad3HubAddress = '0x63ae9644cF5Eda0A3B7f436232C181DbE4542B8E';
+  ad3TokenAddress = '0xc2132d05d31c914a87c6611c10748aeb04b58e8f';
 } else {
   // 默认本地环境
   ad3HubAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
@@ -49,8 +49,8 @@ const defaultCampaignData = {
   kolScope: 'PUBLIC',
   kolRelationDTOS: [
     {
-      kolAddress: '0x1226b8FdBBCE92602E29FF7eb7bFaf98096685A9',
-      contentFee: 430,
+      kolAddress: '0x69d51aA8fB89f2f6448763Abba7aF1906984a77B',
+      contentFee: 1,
       conversionRate: 100,
     },
   ],
@@ -61,8 +61,8 @@ const defaultCampaignData = {
     {
       desc: 'USDT',
       type: 'TOKEN',
-      winnersNum: 3,
-      quota: 30000,
+      winnersNum: 2,
+      quota: 2,
       unit: 'USDT',
     },
   ],
@@ -85,7 +85,7 @@ const defaultCampaignData = {
         'https://twitter.com/BubbleObservers/status/1600488947138056192',
     },
     {
-      name: 'Click to Vote',
+      name: 'Vote for us',
       desc: 'click link and mint NFT',
       type: 'SOCIAL_MEDIA',
       subType: 'LIKE',

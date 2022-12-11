@@ -3,6 +3,18 @@ import { CheckCircleOutlined } from '@ant-design/icons';
 import styles from './index.less';
 
 let interval = null;
+const utcDateFormat = (date) => {
+  const d = new Date(date);
+  const utcD = Date.UTC(
+    d.getUTCFullYear(),
+    d.getUTCMonth(),
+    d.getUTCDate(),
+    d.getUTCHours(),
+    d.getUTCMinutes(),
+    d.getUTCSeconds(),
+  );
+  return new Date(utcD).getTime();
+};
 export default ({
   reward = {},
   campaign = {},
@@ -11,7 +23,8 @@ export default ({
   onFinishedTask = () => {},
 }) => {
   const [countdown, setCountdown] = useState(
-    new Date(campaign.endTime.replace(/-/gi, '/')).getTime() - Date.now(),
+    new Date(utcDateFormat(campaign.endTime.replace(/-/gi, '/'))) -
+      utcDateFormat(new Date()),
   );
 
   useEffect(() => {
@@ -114,7 +127,14 @@ export default ({
         <div className={styles.taskLine} onClick={() => onFinishedTask(l)}>
           <div className={styles.taskContent}>
             {renderTaskIcon(l)}
-            <div className={styles.taskTitle}>{l.task.name}</div>
+            <div className={styles.taskTitle}>
+              {l.task.name}
+              {l.task.name.indexOf('Vote') >= 0 ? (
+                <div className={styles.taskTip}>
+                  Please visit MOOAR on desktop.
+                </div>
+              ) : null}
+            </div>
           </div>
           <span className={styles.boxShadow} />
         </div>
@@ -134,22 +154,23 @@ export default ({
       <div className={styles.cover}>
         <img
           className={styles.coverImage}
-          src={require('@/static/magicpop-cover.png')}
+          src={require('@/static/magic-pop-cover.jpeg')}
         />
       </div>
       {renderCountdown()}
       <div className={styles.list}>{renderList()}</div>
       <div className={styles.description}>
         <h1 className={styles.descTitle}>Description</h1>
-        <h3 className={styles.descQ}>What is Bubble Observers - Observers?</h3>
-        <p className={styles.descA}>
-          Bubble Observersis the 1st story series co-created by magipop DAO
-          members. Bubble
-          Observers-ObserversisitscounterpartNFTseries,corresponding to the
-          characters and various elements within the story.
-        </p>
+        <img
+          style={{ width: '100%', height: 'auto' }}
+          src={require('@/static/magic-pop-desc-1.jpeg')}
+        />
+        <img
+          style={{ width: '100%', height: 'auto', maginTop: '8px' }}
+          src={require('@/static/magic-pop-desc-2.jpeg')}
+        />
       </div>
-      <div className={styles.reward}>
+      {/* <div className={styles.reward}>
         <h1 className={styles.rewardTitle}>Reward</h1>
         <div className={styles.rewardContent}>
           <div className={styles.rewardInfo}>
@@ -180,7 +201,7 @@ export default ({
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
